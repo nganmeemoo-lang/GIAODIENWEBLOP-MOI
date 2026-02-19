@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <title>Hệ Thống Thông Tin Lớp 12A5 - THPT Rạch Kiến</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        body { 
+            font-family: 'Roboto', sans-serif; 
+            background-color: #f4f6f9;
+        }
+        .login-gradient {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        }
+        .form-shadow {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        /* Tùy chỉnh thanh scroll */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="text-gray-800">
+
+<div class="bg-white border-b border-gray-200 py-2 px-6 flex justify-between items-center">
+    <div class="flex items-center gap-3">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a1/Logo_B%E1%BB%99_Gi%C3%A1o_d%E1%BB%A5c_v%C3%A0_%C4%90%C3%A0o_t%E1%BA%A1o.svg" alt="Logo" class="w-12 h-12">
+        <div>
+            <h1 class="text-blue-900 font-bold uppercase text-sm md:text-base leading-tight">Sở Giáo Dục và Đào Tạo tỉnh Tây Ninh</h1>
+            <p class="text-blue-700 text-xs font-medium uppercase">Trường THPT Rạch Kiến - Lớp 12A5</p>
+        </div>
+    </div>
+    <div class="hidden md:block text-right">
+        <p class="text-xs text-gray-500 italic">Hệ thống thông tin học sinh v1.0</p>
+    </div>
+</div>
+
+<main class="min-h-[calc(100vh-140px)] flex flex-col md:flex-row items-center justify-center p-4 gap-8">
+    
+    <div class="hidden lg:block w-1/2 max-w-xl">
+        <h2 class="text-3xl font-bold text-blue-900 mb-4 uppercase">Cổng thông tin <br>thành viên lớp 12A5</h2>
+        <p class="text-gray-600 mb-6">Hệ thống quản lý thông tin, sự kiện và hành trình 3 năm thanh xuân của tập thể lớp 12A5 - THPT Rạch Kiến.</p>
+        <div class="grid grid-cols-2 gap-4">
+            <div class="bg-blue-100 p-4 rounded-lg border-l-4 border-blue-600">
+                <span class="block font-bold text-blue-800">45</span>
+                <span class="text-sm text-blue-600">Thành viên</span>
+            </div>
+            <div class="bg-green-100 p-4 rounded-lg border-l-4 border-green-600">
+                <span class="block font-bold text-green-800">2023-2026</span>
+                <span class="text-sm text-green-600">Niên khóa</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="login-container" class="w-full max-w-md">
+        <div class="bg-white rounded-xl overflow-hidden form-shadow border border-gray-100">
+            <div class="login-gradient p-6 text-white text-center">
+                <h3 class="text-xl font-bold uppercase tracking-wide">Đăng nhập hệ thống</h3>
+                <p class="text-blue-100 text-xs mt-1">Dành cho học sinh lớp 12A5</p>
+            </div>
+            
+            <div class="p-8">
+                <div class="mb-5">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Số CCCD / Tài khoản</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </span>
+                        <input id="loginCCCD" type="text" placeholder="Nhập số CCCD" 
+                               class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Mật khẩu</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </span>
+                        <input id="loginPass" type="password" placeholder="••••••••" 
+                               class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                    </div>
+                </div>
+
+                <p id="loginError" class="text-red-600 text-xs mb-4 hidden bg-red-50 p-2 rounded border border-red-200 text-center"></p>
+
+                <button onclick="handleLogin()" 
+                        class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-lg shadow-lg hover:shadow-xl transform active:scale-[0.98] transition-all uppercase text-sm tracking-wider">
+                    Đăng nhập ngay
+                </button>
+
+                <div class="mt-6 text-center">
+                    <a href="#" class="text-sm text-blue-600 hover:underline">Quên mật khẩu?</a>
+                </div>
+            </div>
+        </div>
+        
+        <p class="text-center text-gray-500 text-xs mt-8 uppercase tracking-widest">
+            &copy; 2026 THPT Rạch Kiến - Tây Ninh
+        </p>
+    </div>
+
+    <div id="personal-dashboard" class="hidden w-full max-w-4xl bg-white rounded-xl shadow-xl overflow-hidden border border-gray-200">
+        <div class="bg-blue-900 p-4 text-white flex justify-between items-center">
+            <span class="font-bold">HỒ SƠ HỌC SINH</span>
+            <button onclick="logout()" class="text-xs bg-red-600 px-3 py-1 rounded hover:bg-red-700">Đăng xuất</button>
+        </div>
+        <div class="p-6 flex flex-col md:flex-row gap-8 items-center">
+            <img id="my-avatar" src="default-avatar.png" class="w-32 h-32 rounded-full border-4 border-gray-100 shadow-md object-cover">
+            <div class="flex-1 space-y-2">
+                <h2 id="my-name" class="text-2xl font-bold text-blue-900 uppercase">...</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                    <p class="text-gray-600">📧 Email: <span id="my-email" class="text-gray-900 font-medium">...</span></p>
+                    <p class="text-gray-600">🆔 CCCD: <span id="my-cccd-display" class="text-gray-900 font-medium">...</span></p>
+                    <p class="text-gray-600">📅 Ngày sinh: <span id="my-birthday" class="text-gray-900 font-medium">...</span></p>
+                    <div class="md:col-span-2 bg-gray-50 p-3 rounded italic text-gray-500 border-l-4 border-blue-400">
+                        "<span id="my-quote">...</span>"
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    // Logic Firebase & Auth (Giữ nguyên logic của bạn nhưng thay đổi ID hiển thị)
+    const firebaseConfig = { /* Giữ config của bạn */ };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    auth.onAuthStateChanged((user) => {
+        const loginForm = document.getElementById("login-container");
+        const dashboard = document.getElementById("personal-dashboard");
+
+        if (user) {
+            loginForm.classList.add("hidden");
+            dashboard.classList.remove("hidden");
+            loadUserProfile(user.email);
+        } else {
+            loginForm.classList.remove("hidden");
+            dashboard.classList.add("hidden");
+        }
+    });
+
+    function handleLogin() {
+        const cccd = document.getElementById("loginCCCD").value.trim();
+        const pass = document.getElementById("loginPass").value;
+        const errorMsg = document.getElementById("loginError");
+
+        if(!cccd || !pass) {
+            errorMsg.innerText = "Vui lòng nhập tài khoản và mật khẩu!";
+            errorMsg.classList.remove("hidden");
+            return;
+        }
+
+        const emailVirtual = cccd + "@a5.com";
+        auth.signInWithEmailAndPassword(emailVirtual, pass)
+            .catch((error) => {
+                errorMsg.innerText = "Thông tin đăng nhập không chính xác!";
+                errorMsg.classList.remove("hidden");
+            });
+    }
+
+    function loadUserProfile(email) {
+        const cccdFromEmail = email.split('@')[0];
+        db.collection("students").where("cccd", "==", cccdFromEmail).limit(1).get()
+        .then((snapshot) => {
+            if (!snapshot.empty) {
+                const data = snapshot.docs[0].data();
+                document.getElementById("my-name").innerText = data.name;
+                document.getElementById("my-avatar").src = data.avatar || 'default-avatar.png';
+                document.getElementById("my-email").innerText = data.email || email; 
+                document.getElementById("my-cccd-display").innerText = data.cccd;
+                document.getElementById("my-birthday").innerText = data.birthday || "Chưa cập nhật";
+                document.getElementById("my-quote").innerText = data.description || "Học tập bứt phá!";
+            }
+        });
+    }
+
+    function logout() {
+        auth.signOut();
+    }
+</script>
+</body>
+</html>
