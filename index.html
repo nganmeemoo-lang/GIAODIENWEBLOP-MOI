@@ -157,46 +157,65 @@
         </div>
 </section>
 
-<section id="tab-gallery" class="tab-content hidden">
-    <h2 class="text-3xl font-black uppercase text-slate-800 mb-6">Khoảnh khắc 12A5</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="gallery-grid">
+<section id="tab-gallery" class="tab-content hidden space-y-12">
+    <div class="border-b-2 border-blue-600 pb-4">
+        <h2 class="text-3xl font-black uppercase text-slate-800 tracking-tighter">
+            📸 Hành Trình 3 Năm Thanh Xuân
+        </h2>
+        <p class="text-blue-600 font-bold text-xs uppercase tracking-[0.2em] mt-2">Kỷ niệm lớp 12A5</p>
+    </div>
+
+    <div class="relative border-l-4 border-blue-100 ml-6 space-y-16 py-4">
+
+        <div class="relative pl-12 group">
+            <div class="absolute -left-[14px] top-2 w-6 h-6 bg-white border-4 border-blue-600 rounded-full group-hover:scale-125 transition-transform"></div>
+            
+            <div class="glass-card p-6 rounded-[2rem] inline-block w-full max-w-4xl">
+                <h3 class="text-xl font-black text-blue-700 mb-4 flex items-center gap-2">
+                    <span class="bg-blue-100 px-3 py-1 rounded-lg text-sm">Năm 2023</span> 📚 Lớp 10 - Khởi Đầu
+                </h3>
+                <div class="overflow-hidden rounded-2xl shadow-lg border-4 border-white">
+                    <img src="class10.jpg" 
+                         alt="Lớp 10"
+                         class="w-full h-[400px] object-cover cursor-zoom-in hover:scale-105 transition-all duration-500"
+                         onerror="this.src='https://via.placeholder.com/800x400?text=KỶ+NIỆM+LỚP+10'">
+                </div>
+            </div>
         </div>
-</section>
-    <section id="section-gallery" class="hidden">
-  <h2 class="text-2xl font-bold mb-10 text-yellow-500 border-b border-yellow-500/30 pb-2">
-    📸 Hành Trình 3 Năm Thanh Xuân
-  </h2>
 
-  <div class="relative border-l-4 border-yellow-600/50 ml-4 space-y-16">
+        <div class="relative pl-12 group">
+            <div class="absolute -left-[14px] top-2 w-6 h-6 bg-white border-4 border-blue-600 rounded-full group-hover:scale-125 transition-transform"></div>
+            
+            <div class="glass-card p-6 rounded-[2rem] inline-block w-full max-w-4xl">
+                <h3 class="text-xl font-black text-blue-700 mb-4 flex items-center gap-2">
+                    <span class="bg-blue-100 px-3 py-1 rounded-lg text-sm">Năm 2024</span> 📖 Lớp 11 - Gắn Kết
+                </h3>
+                <div class="overflow-hidden rounded-2xl shadow-lg border-4 border-white">
+                    <img src="class11.jpg" 
+                         alt="Lớp 11"
+                         class="w-full h-[400px] object-cover cursor-zoom-in hover:scale-105 transition-all duration-500"
+                         onerror="this.src='https://via.placeholder.com/800x400?text=KỶ+NIỆM+LỚP+11'">
+                </div>
+            </div>
+        </div>
 
-    <!-- LỚP 10 -->
-    <div class="relative pl-10">
-      <div class="absolute -left-[14px] top-2 w-6 h-6 bg-yellow-500 rounded-full border-4 border-zinc-900"></div>
-      <h3 class="text-xl font-bold text-yellow-400 mb-4">📚 Năm Lớp 10 - Khởi Đầu</h3>
-      <img src="class10.jpg"
-           onclick="openModal(this.src)"
-           class="rounded-2xl shadow-2xl border-4 border-red-800 w-full max-w-3xl h-64 object-cover cursor-zoom-in hover:scale-105 transition duration-300">
+        <div class="relative pl-12 group">
+            <div class="absolute -left-[14px] top-2 w-6 h-6 bg-white border-4 border-blue-600 rounded-full group-hover:scale-125 transition-transform"></div>
+            
+            <div class="glass-card p-6 rounded-[2rem] inline-block w-full max-w-4xl border-2 border-blue-200">
+                <h3 class="text-xl font-black text-blue-700 mb-4 flex items-center gap-2">
+                    <span class="bg-blue-600 text-white px-3 py-1 rounded-lg text-sm">Năm 2025</span> 🎓 Lớp 12 - Bứt Phá
+                </h3>
+                <div class="overflow-hidden rounded-2xl shadow-lg border-4 border-white">
+                    <img src="class12.jpg" 
+                         alt="Lớp 12"
+                         class="w-full h-[400px] object-cover cursor-zoom-in hover:scale-105 transition-all duration-500"
+                         onerror="this.src='https://via.placeholder.com/800x400?text=KỶ+NIỆM+LỚP+12'">
+                </div>
+            </div>
+        </div>
+
     </div>
-
-    <!-- LỚP 11 -->
-    <div class="relative pl-10">
-      <div class="absolute -left-[14px] top-2 w-6 h-6 bg-yellow-500 rounded-full border-4 border-zinc-900"></div>
-      <h3 class="text-xl font-bold text-yellow-400 mb-4">📖 Năm Lớp 11 - Trưởng Thành</h3>
-      <img src="class11.jpg"
-           onclick="openModal(this.src)"
-           class="rounded-2xl shadow-2xl border-4 border-red-800 w-full max-w-3xl h-64 object-cover cursor-zoom-in hover:scale-105 transition duration-300">
-    </div>
-
-    <!-- LỚP 12 -->
-    <div class="relative pl-10">
-      <div class="absolute -left-[14px] top-2 w-6 h-6 bg-yellow-500 rounded-full border-4 border-zinc-900"></div>
-      <h3 class="text-xl font-bold text-yellow-400 mb-4">🎓 Năm Lớp 12 - Bứt Phá</h3>
-      <img src="class12.jpg"
-           onclick="openModal(this.src)"
-           class="rounded-2xl shadow-2xl border-4 border-red-800 w-full max-w-3xl h-64 object-cover cursor-zoom-in hover:scale-105 transition duration-300">
-    </div>
-
-  </div>
 </section>
 
 
@@ -418,6 +437,7 @@ function filterEvents(type) {
 </script>
 </body>
 </html>
+
 
 
 
