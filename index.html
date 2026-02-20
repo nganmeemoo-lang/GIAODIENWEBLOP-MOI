@@ -30,7 +30,7 @@
 
 <div class="bg-white border-b border-gray-200 py-2 px-6 flex justify-between items-center">
     <div class="flex items-center gap-3">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a1/Logo_B%E1%BB%99_Gi%C3%A1o_d%E1%BB%A5c_v%C3%A0_%C4%90%C3%A0o_t%E1%BA%A1o.svg" alt="Logo" class="w-12 h-12">
+        <img src="logo.png" alt="Logo" class="w-12 h-12">
         <div>
             <h1 class="text-blue-900 font-bold uppercase text-sm md:text-base leading-tight">Sở Giáo Dục và Đào Tạo tỉnh Tây Ninh</h1>
             <p class="text-blue-700 text-xs font-medium uppercase">Trường THPT Rạch Kiến - Lớp 12A5</p>
@@ -187,10 +187,108 @@
             }
         });
     }
+// Cấu hình Firebase của bạn
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
 
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+// Lắng nghe trạng thái đăng nhập
+auth.onAuthStateChanged((user) => {
+    const loginForm = document.getElementById("login-container");
+    const dashboard = document.getElementById("personal-dashboard");
+    const welcomeText = document.querySelector(".lg\\:block"); // Phần text giới thiệu bên trái
+
+    if (user) {
+        // Đã đăng nhập
+        loginForm.classList.add("hidden");
+        if(welcomeText) welcomeText.classList.add("hidden"); // Ẩn giới thiệu khi vào dashboard
+        dashboard.classList.remove("hidden");
+        loadUserProfile(user.email);
+    } else {
+        // Đã đăng xuất
+        loginForm.classList.remove("hidden");
+        if(welcomeText) welcomeText.classList.remove("hidden");
+        dashboard.classList.add("hidden");
+        resetDashboard();
+    }
+});
+
+// Hàm xử lý Đăng nhập
+async function handleLogin() {
+    const cccd = document.getElementById("loginCCCD").value.trim();
+    const pass = document.getElementById("loginPass").value;
+    const errorMsg = document.getElementById("loginError");
+    const loginBtn = event.target;
+
+    if(!cccd || !pass) {
+        showError("Vui lòng nhập đầy đủ thông tin!");
+        return;
+    }
+
+    // Hiệu ứng đang tải
+    loginBtn.disabled = true;
+    loginBtn.innerText = "Đang xác thực...";
+
+    try {
+        // Tạo email ảo dựa trên CCCD để dùng Firebase Auth
+        const emailVirtual = cccd + "@a5.com";
+        await auth.signInWithEmailAndPassword(emailVirtual, pass);
+    } catch (error) {
+        showError("CCCD hoặc mật khẩu không đúng!");
+        loginBtn.disabled = false;
+        loginBtn.innerText = "Đăng nhập ngay";
+    }
+}
+
+// Hàm tải dữ liệu từ Firestore
+function loadUserProfile(email) {
+    const cccdFromEmail = email.split('@')[0];
+    
+    db.collection("students").where("cccd", "==", cccdFromEmail).limit(1).get()
+    .then((snapshot) => {
+        if (!snapshot.empty) {
+            const data = snapshot.docs[0].data();
+            // Đổ dữ liệu vào giao diện
+            document.getElementById("my-name").innerText = data.name || "N/A";
+            document.getElementById("my-avatar").src = data.avatar || 'https://ui-avatars.com/api/?name=' + data.name;
+            document.getElementById("my-email").innerText = data.email || "Chưa cập nhật"; 
+            document.getElementById("my-cccd-display").innerText = data.cccd;
+            document.getElementById("my-birthday").innerText = data.birthday || "Chưa cập nhật";
+            document.getElementById("my-quote").innerText = data.description || "Thanh xuân là một giai điệu đẹp...";
+        }
+    })
+    .catch(err => console.error("Lỗi tải dữ liệu:", err));
+}
+
+function showError(msg) {
+    const errorMsg = document.getElementById("loginError");
+    errorMsg.innerText = msg;
+    errorMsg.classList.remove("hidden");
+}
+
+function resetDashboard() {
+    document.getElementById("loginCCCD").value = "";
+    document.getElementById("loginPass").value = "";
+}
+
+function logout() {
+    if(confirm("Bạn có chắc chắn muốn đăng xuất?")) {
+        auth.signOut();
+    }
+}
     function logout() {
         auth.signOut();
     }
 </script>
 </body>
+
 </html>
