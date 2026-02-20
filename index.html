@@ -268,8 +268,18 @@
         });
     }
 
-    function logout() { if(confirm("Bạn muốn đăng xuất?")) auth.signOut(); }
+  function logout() {
+    // 1. Ẩn thông tin user ngay lập tức trên UI (phản hồi tức thì)
+    document.getElementById("user-info").classList.add("hidden");
+    
+    // 2. Thực hiện logout ngầm
+    auth.signOut().then(() => {
+        // 3. Sau khi xong mới reload hoặc chuyển trang
+        window.location.href = "index.html"; 
+    });
+}
 </script>
 </body>
 </html>
+
 
