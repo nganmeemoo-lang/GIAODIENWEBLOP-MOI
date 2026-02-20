@@ -176,9 +176,10 @@
                 </h3>
                 <div class="overflow-hidden rounded-2xl shadow-lg border-4 border-white">
                     <img src="class10.jpg" 
-                         alt="Lớp 10"
-                         class="w-full h-[400px] object-cover cursor-zoom-in hover:scale-105 transition-all duration-500"
-                         onerror="this.src='https://via.placeholder.com/800x400?text=KỶ+NIỆM+LỚP+10'">
+     alt="Lớp 10"
+     onclick="openModal(this.src)" 
+     class="w-full h-[400px] object-cover cursor-zoom-in hover:scale-105 transition-all duration-500"
+     onerror="this.src='https://via.placeholder.com/800x400?text=KỶ+NIỆM+LỚP+10'">
                 </div>
             </div>
         </div>
@@ -191,10 +192,11 @@
                     <span class="bg-blue-100 px-3 py-1 rounded-lg text-sm">Năm 2024</span> 📖 Lớp 11 - Gắn Kết
                 </h3>
                 <div class="overflow-hidden rounded-2xl shadow-lg border-4 border-white">
-                    <img src="class11.jpg" 
-                         alt="Lớp 11"
-                         class="w-full h-[400px] object-cover cursor-zoom-in hover:scale-105 transition-all duration-500"
-                         onerror="this.src='https://via.placeholder.com/800x400?text=KỶ+NIỆM+LỚP+11'">
+                   <img src="class11.jpg" 
+     alt="Lớp 11"
+     onclick="openModal(this.src)" 
+     class="w-full h-[400px] object-cover cursor-zoom-in hover:scale-105 transition-all duration-500"
+     onerror="this.src='https://via.placeholder.com/800x400?text=KỶ+NIỆM+LỚP+11'">
                 </div>
             </div>
         </div>
@@ -208,9 +210,10 @@
                 </h3>
                 <div class="overflow-hidden rounded-2xl shadow-lg border-4 border-white">
                     <img src="class12.jpg" 
-                         alt="Lớp 12"
-                         class="w-full h-[400px] object-cover cursor-zoom-in hover:scale-105 transition-all duration-500"
-                         onerror="this.src='https://via.placeholder.com/800x400?text=KỶ+NIỆM+LỚP+12'">
+     alt="Lớp 12"
+     onclick="openModal(this.src)" 
+     class="w-full h-[400px] object-cover cursor-zoom-in hover:scale-105 transition-all duration-500"
+     onerror="this.src='https://via.placeholder.com/800x400?text=KỶ+NIỆM+LỚP+12'">
                 </div>
             </div>
         </div>
@@ -264,7 +267,17 @@
         <button onclick="document.getElementById('authModal').classList.add('hidden')" class="w-full mt-6 text-slate-400 text-[10px] font-black uppercase">Trở về</button>
     </div>
 </div>
-
+    
+<div id="imageModal" class="fixed inset-0 bg-slate-900/90 backdrop-blur-md hidden z-[200] flex items-center justify-center p-4 md:p-10" onclick="closeModal()">
+    <button class="absolute top-5 right-5 text-white text-4xl font-light hover:text-blue-400 transition">&times;</button>
+    <img id="modalImg" src="" class="max-w-full max-h-full rounded-xl shadow-2xl border-4 border-white/10 object-contain animate-zoom">
+</div>
+``Modal phóng to
+<style>
+    .animate-zoom { animation: zoom 0.3s ease-out; }
+    @keyframes zoom { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .cursor-zoom-in { cursor: zoom-in; }
+</style>
 <script>
     // --- GIỮ NGUYÊN FIREBASE VÀ LOGIC ---
     const firebaseConfig = { 
@@ -435,8 +448,24 @@ function filterEvents(type) {
     loadEvents(type);
 }
 </script>
+    function openModal(src) {
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("modalImg");
+    modal.classList.remove("hidden");
+    modalImg.src = src;
+    // Chặn cuộn trang khi đang xem ảnh
+    document.body.style.overflow = "hidden";
+}
+
+function closeModal() {
+    const modal = document.getElementById("imageModal");
+    modal.classList.add("hidden");
+    // Mở lại cuộn trang
+    document.body.style.overflow = "auto";
+}
 </body>
 </html>
+
 
 
 
