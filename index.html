@@ -51,7 +51,18 @@
                     <span class="text-yellow-500 text-[9px] opacity-80 font-medium">Học sinh</span>
                 </div>
                 <div class="relative group cursor-pointer" onclick="logout()">
-                    <img id="nav-avatar" src="" class="w-9 h-9 rounded-full border-2 border-yellow-500 object-cover shadow-lg shadow
+                    <img id="nav-avatar" src="" class="w-9 h-9 rounded-full border-2 border-yellow-500 object-cover shadow-lg shadow-yellow-500/10 transition-transform active:scale-90">
+                    <div class="absolute inset-0 bg-red-600/90 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-300 text-[8px] font-black text-white">ĐĂNG XUẤT</div>
+                </div>
+            </div>
+            
+            <button id="btnLoginOpen" onclick="document.getElementById('authModal').classList.remove('hidden')" 
+                    class="bg-yellow-500 text-slate-900 px-4 py-2 rounded-xl font-black text-[10px] hover:bg-yellow-400 transition-all transform active:scale-95 shadow-lg shadow-yellow-500/20">
+                ĐĂNG NHẬP
+            </button>
+        </nav>
+    </div>
+</header>
 <main class="max-w-7xl mx-auto p-4 md:p-8">
     
     <section id="tab-home" class="tab-content grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -294,4 +305,5 @@ function loadStudentList() {
 
 </body>
 </html>
+
 
