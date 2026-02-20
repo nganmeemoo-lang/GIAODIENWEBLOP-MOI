@@ -62,8 +62,10 @@
         </div>
 
         <nav class="flex items-center gap-4 md:gap-10 text-[12px] font-black uppercase tracking-widest text-slate-600">
-            <button onclick="showTab('home')" class="tab-link nav-active py-2 transition hover:text-blue-600">Tin tức</button>
-            <button onclick="showTab('students')" class="tab-link py-2 transition hover:text-blue-600">Lớp học</button>
+           <button onclick="showTab('home')" class="tab-link nav-active py-2 transition hover:text-blue-600"> Tin tức</button>
+            <button onclick="showTab('students')" class="tab-link py-2 transition hover:text-blue-600"> Lớp học</button>
+            <button onclick="showTab('events')" class="tab-link py-2 transition hover:text-blue-600">Sự kiện</button>
+            <button onclick="showTab('gallery')" class="tab-link py-2 transition hover:text-blue-600"> Ảnh lớp</button>
             
             <div id="user-info" class="hidden flex items-center gap-3 bg-slate-100 p-1 pr-4 rounded-full border border-slate-200">
                 <div class="relative group cursor-pointer" onclick="logout()">
@@ -140,7 +142,26 @@
             <div class="bg-blue-600 text-white px-5 py-2 rounded-xl font-black text-xs uppercase shadow-lg shadow-blue-200">Sĩ số: 45</div>
         </div>
         <div id="student-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"></div>
-    </section>
+    </section> 
+    <section id="tab-events" class="tab-content hidden space-y-6">
+    <div class="flex items-center justify-between border-b pb-4 border-slate-200">
+        <h2 class="text-3xl font-black uppercase text-slate-800">Sự kiện lớp</h2>
+        <div class="flex gap-2">
+            <button onclick="filterEvents('all')" class="px-4 py-1 bg-blue-600 text-white rounded-full text-[10px] font-bold">Tất cả</button>
+            <button onclick="filterEvents('hoc-tap')" class="px-4 py-1 bg-slate-200 text-slate-600 rounded-full text-[10px] font-bold">Học tập</button>
+            <button onclick="filterEvents('vui-choi')" class="px-4 py-1 bg-slate-200 text-slate-600 rounded-full text-[10px] font-bold">Vui chơi</button>
+        </div>
+    </div>
+    
+    <div id="event-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        </div>
+</section>
+
+<section id="tab-gallery" class="tab-content hidden">
+    <h2 class="text-3xl font-black uppercase text-slate-800 mb-6">Khoảnh khắc 12A5</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="gallery-grid">
+        </div>
+</section>
 </main>
 
 <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-[100] flex items-center justify-center p-6">
@@ -278,8 +299,59 @@
         window.location.href = "index.html"; 
     });
 }
+    // 1. Hàm chuyển Tab tổng quát
+function showTab(tabName) {
+    // Ẩn tất cả section
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+    // Bỏ trạng thái active của nút
+    document.querySelectorAll('.tab-link').forEach(el => el.classList.remove('nav-active'));
+    
+    // Hiện section được chọn
+    const activeSection = document.getElementById('tab-' + tabName);
+    if(activeSection) {
+        activeSection.classList.remove('hidden');
+    }
+    
+    // Active nút tương ứng
+    event.currentTarget.classList.add('nav-active');
+
+    // Gọi hàm load dữ liệu riêng cho từng tab
+    if(tabName === 'students') loadStudentList();
+    if(tabName === 'events') loadEvents();
+}
+
+// 2. Hàm load và phân loại Sự kiện
+function loadEvents(filter = 'all') {
+    const eventList = document.getElementById('event-list');
+    eventList.innerHTML = '<p class="text-center col-span-full">Đang tải sự kiện...</p>';
+
+    db.collection("events").get().then(snap => {
+        eventList.innerHTML = "";
+        snap.forEach(doc => {
+            const ev = doc.data();
+            
+            // Logic phân loại (Nếu filter khác 'all' thì chỉ hiện loại tương ứng)
+            if(filter !== 'all' && ev.type !== filter) return;
+
+            eventList.innerHTML += `
+                <div class="glass-card p-6 rounded-3xl border border-slate-100 shadow-sm">
+                    <span class="text-[10px] font-black uppercase px-3 py-1 bg-blue-100 text-blue-600 rounded-lg">${ev.type}</span>
+                    <h3 class="text-xl font-bold text-slate-800 mt-3">${ev.title}</h3>
+                    <p class="text-slate-500 text-sm mt-2">${ev.content}</p>
+                    <div class="mt-4 text-[11px] font-bold text-slate-400">📅 ${ev.date}</div>
+                </div>
+            `;
+        });
+    });
+}
+
+// 3. Hàm lọc nhanh
+function filterEvents(type) {
+    loadEvents(type);
+}
 </script>
 </body>
 </html>
+
 
 
