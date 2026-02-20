@@ -225,45 +225,74 @@
         }
     }
 
-    // 4. Load Data Cá nhân
-    function loadPersonalData(email) {
-        db.collection("students").where("email", "==", email).limit(1).get()
-        .then(snap => {
-            if(!snap.empty) {
-                const d = snap.docs[0].data();
-                document.getElementById("nav-user-name").innerText = d.name;
-                document.getElementById("nav-avatar").src = d.avatar || 'default-avatar.png';
-                document.getElementById("my-name").innerText = d.name;
-                document.getElementById("my-avatar").src = d.avatar || 'default-avatar.png';
-                document.getElementById("my-email").innerText = email.split('@')[0]; // Hiện CCCD thay vì mail
-                document.getElementById("my-quote").innerText = d.description || "Hãy nỗ lực hết mình vì mục tiêu đại học!";
-            }
+   // --- CẬP NHẬT LOGIC LOAD DATA THEO ĐÚNG FIELD DATABASE CỦA BẠN ---
+
+// 1. Tải hồ sơ cá nhân khi đăng nhập thành công
+function loadPersonalData(email) {
+    const cccdFromEmail = email.split('@')[0]; // Lấy số CCCD từ email đăng nhập
+    
+    db.collection("students").where("cccd", "==", cccdFromEmail).limit(1).get()
+    .then(snap => {
+        if(!snap.empty) {
+            const d = snap.docs[0].data();
+            
+            // Đổ dữ liệu vào Header
+            document.getElementById("nav-user-name").innerText = d.name;
+            document.getElementById("nav-avatar").src = d.avatar || 'default-avatar.png';
+            
+            // Đổ dữ liệu vào Dashboard Profile (Cột phải)
+            document.getElementById("my-name").innerText = d.name;
+            document.getElementById("my-avatar").src = d.avatar || 'default-avatar.png';
+            document.getElementById("my-email").innerText = "Số định danh: " + d.cccd;
+            document.getElementById("my-quote").innerText = d.description || "Học tập để ngày mai lập nghiệp!";
+            
+            // Bổ sung hiển thị thông tin chi tiết (nếu bạn muốn thêm vào giao diện)
+            // Ví dụ: Giới tính: ${d.gender}, Sinh nhật: ${d.birthday}
+        }
+    })
+    .catch(err => console.error("Lỗi truy xuất hồ sơ:", err));
+}
+
+// 2. Tải danh sách lớp (Card hiển thị thêm icon Facebook)
+function loadStudentList() {
+    const grid = document.getElementById("student-grid");
+    grid.innerHTML = '<p class="col-span-full text-center text-yellow-500 animate-pulse uppercase font-black text-[10px]">Đang kết nối cơ sở dữ liệu Sở GD Tây Ninh...</p>';
+
+    db.collection("students").get().then(snap => {
+        grid.innerHTML = "";
+        let list = [];
+        snap.forEach(doc => list.push(doc.data()));
+        
+        // Sắp xếp theo tên (A-Z)
+        list.sort((a,b) => {
+            const getLastName = (name) => name ? name.split(' ').pop() : "";
+            return getLastName(a.name).localeCompare(getLastName(b.name), 'vi');
         });
-    }
 
-    // 5. Load Danh sách lớp (Card thiết kế giống App)
-    function loadStudentList() {
-        const grid = document.getElementById("student-grid");
-        grid.innerHTML = '<p class="col-span-full text-center text-xs text-yellow-500 font-bold uppercase animate-pulse">Đang tải dữ liệu từ sở...</p>';
-        db.collection("students").get().then(snap => {
-            grid.innerHTML = "";
-            let list = [];
-            snap.forEach(doc => list.push(doc.data()));
-            list.sort((a,b) => a.name.split(' ').pop().localeCompare(b.name.split(' ').pop(), 'vi'));
+        list.forEach(s => {
+            // Kiểm tra link Facebook để hiện nút
+            const fbIcon = s.facebook ? 
+                `<a href="${s.facebook}" target="_blank" class="absolute top-2 right-2 bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px] shadow-lg">f</a>` 
+                : '';
 
-            list.forEach(s => {
-                grid.innerHTML += `
-                    <div class="glass-card student-card p-5 rounded-[2rem] text-center border border-white/5 transition-all duration-300">
+            grid.innerHTML += `
+                <div class="glass-card student-card p-5 rounded-[2rem] text-center border border-white/5 transition-all duration-300 relative">
+                    ${fbIcon}
+                    <div class="relative w-20 h-20 mx-auto mb-4">
                         <img src="${s.avatar || 'default-avatar.png'}" 
-                             class="w-20 h-20 rounded-full mx-auto mb-4 border-2 border-yellow-500/50 p-1 object-cover shadow-lg"
-                             onerror="this.src='default-avatar.png'">
-                        <h4 class="text-[11px] font-black text-white uppercase truncate">${s.name}</h4>
-                        <p class="text-[9px] text-slate-500 mt-2 font-bold bg-white/5 py-1 rounded-full italic tracking-tighter">${s.birthday || '12A5 MEMBER'}</p>
+                             class="w-20 h-20 rounded-full border-2 border-yellow-500/30 p-1 object-cover shadow-lg"
+                             onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(s.name)}&background=facc15&color=0f172a'">
                     </div>
-                `;
-            });
+                    <h4 class="text-[11px] font-black text-white uppercase truncate">${s.name}</h4>
+                    <div class="mt-2 space-y-1">
+                         <p class="text-[9px] text-yellow-500 font-bold tracking-tighter uppercase">${s.gender === 'Nam' ? '♂ Nam' : '♀ Nữ'}</p>
+                         <p class="text-[8px] text-slate-500 italic bg-white/5 rounded-full py-0.5">${s.birthday || 'Chưa cập nhật NS'}</p>
+                    </div>
+                </div>
+            `;
         });
-    }
+    });
+}
 
     function logout() { if(confirm("Đăng xuất khỏi hệ thống?")) auth.signOut(); }
 </script>
