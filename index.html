@@ -15,10 +15,17 @@
         body { font-family: 'Quicksand', sans-serif; background-color: #f4f6f9; color: #1e293b; }
         .glass-card { background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
         .nav-active { color: #2563eb; border-bottom: 4px solid #2563eb; }
-        .student-card { transition: all 0.3s ease; background: #ffffff; border: 1px solid #e2e8f0; cursor: pointer; }
+        
+        /* Hiệu ứng thẻ học sinh */
+        .student-card { transition: all 0.3s ease; background: #ffffff; border: 1px solid #e2e8f0; cursor: pointer; position: relative; overflow: hidden; }
         .student-card:hover { transform: translateY(-5px); border-color: #2563eb; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .animate-zoom { animation: zoom 0.3s ease-out; }
-        @keyframes zoom { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .student-card::after { content: 'XEM CHI TIẾT'; position: absolute; bottom: 0; left: 0; right: 0; background: #2563eb; color: white; font-size: 8px; font-weight: 800; padding: 4px; opacity: 0; transition: 0.3s; }
+        .student-card:hover::after { opacity: 1; }
+
+        /* Animation cho Popup */
+        .animate-pop { animation: pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes pop { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
@@ -31,20 +38,18 @@
             <img src="logo.png" class="h-12 w-12 object-contain" onerror="this.src='https://ui-avatars.com/api/?name=RK&background=2563eb&color=fff'">
             <div class="leading-tight border-l-2 border-slate-200 pl-4">
                 <h2 class="text-slate-500 font-bold uppercase text-[9px]">Sở GD&ĐT Tây Ninh</h2>
-                <h1 class="text-blue-700 font-black uppercase text-sm md:text-xl">THPT Rạch Kiến - 12A5</h1>
+                <h1 class="text-blue-700 font-black uppercase text-sm md:text-xl tracking-tighter">THPT Rạch Kiến - 12A5</h1>
             </div>
         </div>
-        <nav class="flex items-center gap-4 md:gap-10 text-[11px] font-black uppercase text-slate-600">
+        <nav class="flex items-center gap-4 md:gap-8 text-[11px] font-black uppercase text-slate-600">
             <button onclick="showTab('home')" class="tab-link nav-active py-2">Tin tức</button>
             <button onclick="showTab('students')" class="tab-link py-2">Lớp học</button>
             <button onclick="showTab('events')" class="tab-link py-2">Sự kiện</button>
             <button onclick="showTab('gallery')" class="tab-link py-2">Ảnh lớp</button>
-            <div id="user-info" class="hidden flex items-center gap-3 bg-slate-100 p-1 pr-4 rounded-full">
-                <img id="nav-avatar" class="w-8 h-8 rounded-full border border-blue-500 object-cover">
-                <p id="nav-user-name" class="text-slate-700 text-[10px] font-bold truncate max-w-[80px]">...</p>
-                <button onclick="logout()" class="text-red-500 font-black ml-2 text-[8px]">OUT</button>
+            <div id="user-info" class="hidden flex items-center gap-2 bg-slate-100 p-1 pr-3 rounded-full">
+                <img id="nav-avatar" class="w-7 h-7 rounded-full object-cover">
+                <button onclick="logout()" class="text-red-500 font-black text-[9px]">OUT</button>
             </div>
-            <button id="btnLoginOpen" onclick="document.getElementById('authModal').classList.remove('hidden')" class="bg-blue-600 text-white px-4 py-2 rounded-xl">ĐĂNG NHẬP</button>
         </nav>
     </div>
 </header>
@@ -52,127 +57,94 @@
 <main class="max-w-7xl mx-auto p-4 md:p-8">
     <section id="tab-home" class="tab-content grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div class="lg:col-span-8 space-y-6">
-            <h2 class="text-2xl font-black uppercase text-slate-800">Bảng tin hệ thống</h2>
-            <div class="glass-card rounded-[2rem] p-8">
-                <span class="bg-blue-100 text-blue-700 text-[10px] font-black px-4 py-1.5 rounded-full uppercase mb-4 inline-block">Thông báo</span>
-                <h3 class="text-2xl font-black text-slate-800 mb-4">CHÀO MỪNG NĂM HỌC 2025-2026</h3>
-                <p class="text-slate-600 leading-relaxed mb-6">Trang web chính thức dành cho tập thể lớp 12A5 - THPT Rạch Kiến.</p>
-                <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=1200" class="w-full h-64 object-cover rounded-2xl">
+            <h2 class="text-2xl font-black uppercase text-slate-800 flex items-center gap-2">
+                <span class="w-1.5 h-6 bg-blue-600 rounded-full"></span> Bảng tin lớp
+            </h2>
+            <div class="glass-card rounded-[2rem] p-6">
+                <img src="https://images.unsplash.com/photo-1523050853063-915894098232?auto=format&fit=crop&w=1200" class="w-full h-64 object-cover rounded-2xl mb-6">
+                <h3 class="text-xl font-black text-slate-800 uppercase">Thông báo mới nhất</h3>
+                <p class="text-slate-500 mt-2">Chào mừng các bạn đến với hệ thống quản lý thành viên lớp 12A5. Chúc các bạn có một năm học cuối cấp thật rực rỡ!</p>
             </div>
         </div>
         <div class="lg:col-span-4">
-            <div id="welcome-box" class="glass-card p-10 rounded-[2rem] text-center">🏛️ <br>Đăng nhập để xem hồ sơ</div>
-            <div id="personal-profile" class="hidden glass-card p-0 rounded-[2.5rem] overflow-hidden">
-                <div class="bg-blue-600 h-20"></div>
-                <div class="px-6 pb-8 -mt-10 text-center">
-                    <img id="my-avatar" class="w-24 h-24 rounded-full border-4 border-white mx-auto shadow-lg bg-white object-cover">
-                    <h3 id="my-name" class="text-xl font-black uppercase text-slate-800 mt-3">...</h3>
-                    <p id="my-cccd" class="text-blue-600 font-bold text-xs italic mb-4">...</p>
-                    <div id="my-quote" class="bg-blue-50 p-3 rounded-xl italic text-blue-800 text-[11px] mb-4">...</div>
-                    <a id="my-fb-link" href="#" target="_blank" class="bg-[#1877F2] text-white py-3 rounded-xl font-black text-sm block">Facebook</a>
-                </div>
+            <div id="welcome-box" class="glass-card p-8 rounded-[2rem] text-center border-dashed text-slate-400 font-bold uppercase text-xs"> Đăng nhập để xem cá nhân </div>
+            <div id="personal-profile" class="hidden glass-card rounded-[2rem] overflow-hidden text-center pb-6">
+                <div class="h-16 bg-blue-600 mb-[-40px]"></div>
+                <img id="my-avatar" class="w-20 h-20 rounded-full border-4 border-white mx-auto relative shadow-md object-cover bg-white">
+                <h3 id="my-name" class="mt-3 font-black text-slate-800 uppercase text-lg">...</h3>
+                <p id="my-cccd" class="text-blue-500 font-bold text-[10px] mb-4">...</p>
+                <div class="px-6 text-[11px] text-slate-500 italic" id="my-quote">...</div>
             </div>
         </div>
     </section>
 
     <section id="tab-students" class="tab-content hidden">
-        <div class="flex justify-between items-center mb-8 border-b pb-4">
-            <h2 class="text-3xl font-black uppercase text-slate-800">Danh sách lớp</h2>
-            <div class="bg-blue-600 text-white px-5 py-2 rounded-xl font-black text-xs uppercase">Sĩ số: 45</div>
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-black uppercase text-slate-800 tracking-tight">Thành viên lớp 12A5</h2>
+            <span class="bg-blue-600 text-white px-4 py-1 rounded-full text-[10px] font-black">SĨ SỐ: 45</span>
         </div>
-        <div id="student-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
+        <div id="student-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            </div>
     </section>
 
-    <section id="tab-events" class="tab-content hidden space-y-8">
-        <h2 class="text-3xl font-black uppercase text-slate-800 border-b pb-4">📅 Sự kiện </h2>
-        <div class="bg-blue-50 p-6 rounded-[2rem] text-center">
-            <h3 class="font-black text-blue-700 uppercase mb-4">Menu Hội Xuân 2026</h3>
-            <img src="menu.jpg" onclick="openImageModal(this.src)" class="max-w-md w-full mx-auto rounded-2xl shadow-xl cursor-zoom-in" onerror="this.src='https://via.placeholder.com/600x800?text=MENU+HỘI+XUÂN'">
+    <section id="tab-events" class="tab-content hidden">
+        <h2 class="text-2xl font-black uppercase text-slate-800 mb-6">Sự kiện sắp tới</h2>
+        <div class="glass-card p-6 rounded-3xl text-center">
+            <h3 class="font-bold text-blue-600 mb-4 uppercase">Menu Hội Xuân 2026</h3>
+            <img src="menu.jpg" onclick="openImageModal(this.src)" class="max-w-xs w-full mx-auto rounded-xl shadow-lg cursor-zoom-in" onerror="this.src='https://via.placeholder.com/400x600?text=MENU+12A5'">
         </div>
-        <div id="event-list" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
     </section>
 
-    <section id="tab-gallery" class="tab-content hidden space-y-10">
-    <div class="flex items-center gap-4 border-b border-slate-200 pb-6">
-        <h2 class="text-3xl font-black uppercase text-slate-800 tracking-tighter">📸 Kỷ niệm thanh xuân</h2>
-        <span class="bg-blue-100 text-blue-700 px-4 py-1 rounded-full text-[10px] font-black uppercase">12A5 Memories</span>
-    </div>
-
-    <div class="space-y-12 pl-6 border-l-4 border-blue-100 ml-4">
-        
-        <div class="relative pl-10">
-            <div class="absolute -left-[14px] top-1 w-6 h-6 bg-white border-4 border-blue-600 rounded-full shadow-sm"></div>
-            <div class="glass-card p-4 rounded-[2rem] hover:shadow-xl transition-shadow">
-                <div class="flex justify-between items-center mb-3">
-                    <h3 class="font-black text-blue-700 uppercase tracking-widest text-sm">Năm học: Lớp 10</h3>
-                    <span class="text-slate-400 text-[10px] font-bold">2023 - 2024</span>
-                </div>
-                <img src="class10.jpg" onclick="openImageModal(this.src)" 
-                     class="w-full h-64 md:h-80 object-cover rounded-2xl cursor-zoom-in hover:opacity-95 transition-opacity shadow-inner" 
-                     onerror="this.src='https://via.placeholder.com/800x400?text=ẢNH+LỚP+10'">
+    <section id="tab-gallery" class="tab-content hidden">
+        <h2 class="text-2xl font-black uppercase text-slate-800 mb-6 tracking-tighter">Hành trình thanh xuân</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="glass-card p-4 rounded-3xl" onclick="openImageModal('class10.jpg')">
+                <h4 class="font-black text-blue-600 text-xs mb-3 uppercase">Kỷ niệm lớp 10</h4>
+                <img src="class10.jpg" class="w-full h-48 object-cover rounded-xl" onerror="this.src='https://via.placeholder.com/600x400?text=NIÊN+KHÓA+10'">
             </div>
         </div>
-
-        <div class="relative pl-10">
-            <div class="absolute -left-[14px] top-1 w-6 h-6 bg-white border-4 border-blue-600 rounded-full shadow-sm"></div>
-            <div class="glass-card p-4 rounded-[2rem] hover:shadow-xl transition-shadow">
-                <div class="flex justify-between items-center mb-3">
-                    <h3 class="font-black text-blue-700 uppercase tracking-widest text-sm">Năm học: Lớp 11</h3>
-                    <span class="text-slate-400 text-[10px] font-bold">2024 - 2025</span>
-                </div>
-                <img src="class11.jpg" onclick="openImageModal(this.src)" 
-                     class="w-full h-64 md:h-80 object-cover rounded-2xl cursor-zoom-in hover:opacity-95 transition-opacity shadow-inner" 
-                     onerror="this.src='https://via.placeholder.com/800x400?text=ẢNH+LỚP+11'">
-            </div>
-        </div>
-
-        <div class="relative pl-10">
-            <div class="absolute -left-[14px] top-1 w-6 h-6 bg-white border-4 border-blue-600 rounded-full shadow-sm"></div>
-            <div class="glass-card p-4 rounded-[2rem] hover:shadow-xl transition-shadow">
-                <div class="flex justify-between items-center mb-3">
-                    <h3 class="font-black text-blue-700 uppercase tracking-widest text-sm">Năm học: Lớp 12</h3>
-                    <span class="text-slate-400 text-[10px] font-bold">2025 - 2026</span>
-                </div>
-                <img src="class12.jpg" onclick="openImageModal(this.src)" 
-                     class="w-full h-64 md:h-80 object-cover rounded-2xl cursor-zoom-in hover:
+    </section>
 </main>
 
-<div id="studentInfoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-[150] flex items-center justify-center p-6" onclick="closeStudentModal()">
-    <div class="bg-white w-full max-w-sm rounded-[2.5rem] p-8 shadow-2xl relative" onclick="event.stopPropagation()">
-        <button class="absolute top-5 right-5 text-slate-400 text-2xl" onclick="closeStudentModal()">&times;</button>
+<div id="authModal" class="fixed inset-0 bg-slate-900/60 hidden z-[100] flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-xs rounded-[2rem] p-6 shadow-2xl">
+        <h3 class="font-black text-center text-slate-800 uppercase mb-4">Đăng nhập</h3>
+        <input id="loginEmail" type="text" placeholder="Số CCCD" class="w-full bg-slate-50 border p-3 rounded-xl mb-3 outline-none focus:border-blue-600 font-bold text-sm">
+        <input id="loginPass" type="password" placeholder="Mật khẩu" class="w-full bg-slate-50 border p-3 rounded-xl mb-3 outline-none focus:border-blue-600 text-sm">
+        <button onclick="handleLogin()" class="w-full bg-blue-600 text-white font-black py-3 rounded-xl text-sm">XÁC NHẬN</button>
+        <button onclick="document.getElementById('authModal').classList.add('hidden')" class="w-full mt-4 text-slate-400 text-[10px] font-black uppercase">Trở về</button>
+    </div>
+</div>
+
+<div id="studentInfoModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden z-[200] flex items-center justify-center p-6" onclick="closeStudentModal()">
+    <div class="bg-white w-full max-w-[320px] rounded-[2.5rem] p-8 shadow-2xl relative animate-pop" onclick="event.stopPropagation()">
+        <button class="absolute top-4 right-4 text-slate-300 hover:text-red-500 text-2xl font-light" onclick="closeStudentModal()">&times;</button>
+        
         <div class="text-center">
-            <img id="detail-avatar" src="" class="w-28 h-28 rounded-full mx-auto mb-4 border-4 border-blue-100 object-cover">
-            <h3 id="detail-name" class="text-2xl font-black text-slate-800 uppercase mb-1">...</h3>
-            <div class="inline-block px-4 py-1 bg-blue-50 text-blue-600 rounded-full text-[10px] font-bold mb-6 tracking-widest">
+            <div class="relative w-28 h-28 mx-auto mb-4">
+                <img id="detail-avatar" src="" class="w-full h-full rounded-full object-cover border-4 border-blue-50 shadow-sm">
+            </div>
+            
+            <h3 id="detail-name" class="text-xl font-black text-slate-800 uppercase tracking-tight mb-1">...</h3>
+            
+            <div class="inline-block px-3 py-0.5 bg-blue-100 text-blue-700 rounded-full text-[10px] font-bold mb-4">
                 📅 <span id="detail-birthday">...</span>
             </div>
-            <div class="bg-slate-50 p-5 rounded-2xl border border-dashed border-slate-200">
-                <p class="text-[9px] text-slate-400 font-black uppercase mb-2 tracking-tighter">Lời giới thiệu</p>
-                <p id="detail-desc" class="text-slate-600 italic text-sm leading-relaxed">...</p>
+            
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                <p class="text-[8px] text-slate-400 font-black uppercase mb-1 tracking-widest">Lời giới thiệu</p>
+                <p id="detail-desc" class="text-slate-600 italic text-[12px] leading-relaxed">...</p>
             </div>
         </div>
     </div>
 </div>
 
-<div id="imageModal" class="fixed inset-0 bg-slate-900/90 hidden z-[200] flex items-center justify-center p-4" onclick="closeImageModal()">
-    <img id="modalImg" src="" class="max-w-full max-h-full rounded-lg animate-zoom">
-</div>
-
-<div id="authModal" class="fixed inset-0 bg-slate-900/60 hidden z-[100] flex items-center justify-center p-6">
-    <div class="bg-white w-full max-w-sm rounded-[2rem] p-8">
-        <h3 class="text-xl font-black uppercase text-center mb-6">Xác thực 12A5</h3>
-        <div class="space-y-4">
-            <input id="loginEmail" type="text" placeholder="Số CCCD" class="w-full bg-slate-50 border p-4 rounded-xl outline-none focus:border-blue-600 font-bold">
-            <input id="loginPass" type="password" placeholder="Mật khẩu" class="w-full bg-slate-50 border p-4 rounded-xl outline-none focus:border-blue-600">
-            <p id="loginError" class="text-red-500 text-xs text-center hidden">Sai thông tin!</p>
-            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white font-black py-4 rounded-xl">ĐĂNG NHẬP</button>
-            <button onclick="document.getElementById('authModal').classList.add('hidden')" class="w-full text-slate-400 text-[10px] font-black uppercase">Đóng</button>
-        </div>
-    </div>
+<div id="imageModal" class="fixed inset-0 bg-slate-900/90 hidden z-[300] flex items-center justify-center p-4" onclick="this.classList.add('hidden')">
+    <img id="modalImg" src="" class="max-w-full max-h-full rounded-lg">
 </div>
 
 <script>
-    // --- FIREBASE CONFIG ---
+    // --- CẤU HÌNH FIREBASE ---
     const firebaseConfig = { 
         apiKey: "AIzaSyC8DW3w2ZbhZ8tnAA6ZJ-BQ69JMu0yVtzQ",
         authDomain: "dsclass12a5.firebaseapp.com",
@@ -185,26 +157,24 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // --- TAB SYSTEM ---
+    // --- CHUYỂN TAB ---
     function showTab(tabName) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
         document.querySelectorAll('.tab-link').forEach(el => el.classList.remove('nav-active'));
         document.getElementById('tab-' + tabName).classList.remove('hidden');
         if(event && event.currentTarget) event.currentTarget.classList.add('nav-active');
         if(tabName === 'students') loadStudentList();
-        if(tabName === 'events') loadEvents();
     }
 
-    // --- AUTHENTICATION ---
+    // --- ĐĂNG NHẬP ---
     async function handleLogin() {
         const input = document.getElementById("loginEmail").value.trim();
         const pass = document.getElementById("loginPass").value;
-        const err = document.getElementById("loginError");
         let email = input.includes("@") ? input : input + "@a5.com";
         try {
             await auth.signInWithEmailAndPassword(email, pass);
             document.getElementById("authModal").classList.add("hidden");
-        } catch (e) { err.classList.remove("hidden"); }
+        } catch (e) { alert("Thông tin đăng nhập không đúng!"); }
     }
 
     auth.onAuthStateChanged((user) => {
@@ -221,48 +191,45 @@
         db.collection("students").where("cccd", "==", cccd).limit(1).get().then(snap => {
             if(!snap.empty) {
                 const d = snap.docs[0].data();
-                document.getElementById("nav-user-name").innerText = d.name;
                 document.getElementById("nav-avatar").src = d.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(d.name);
                 document.getElementById("my-name").innerText = d.name;
                 document.getElementById("my-avatar").src = d.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(d.name);
                 document.getElementById("my-cccd").innerText = "ID: " + d.cccd;
-                document.getElementById("my-quote").innerText = d.description || "Học tập để ngày mai lập nghiệp!";
-                const fb = document.getElementById("my-fb-link");
-                if(d.facebook) { fb.href = d.facebook; fb.style.display = "block"; } else { fb.style.display = "none"; }
+                document.getElementById("my-quote").innerText = d.description || "Thành viên lớp 12A5";
             }
         });
     }
 
-    // --- DANH SÁCH HỌC SINH (SẮP XẾP THEO TÊN) ---
+    // --- LOAD DANH SÁCH & SẮP XẾP TÊN ---
     function loadStudentList() {
         const grid = document.getElementById("student-grid");
-        grid.innerHTML = '<p class="col-span-full text-center py-20 text-blue-600 animate-pulse font-black uppercase">Đang tải...</p>';
+        grid.innerHTML = '<p class="col-span-full text-center py-10 text-xs font-bold text-slate-400">ĐANG TẢI DANH SÁCH...</p>';
         db.collection("students").get().then(snap => {
             grid.innerHTML = "";
             let list = [];
             snap.forEach(doc => list.push(doc.data()));
             
-            // Sắp xếp theo cụm chữ cái cuối của tên
+            // Sắp xếp theo tên (chữ cuối cùng)
             list.sort((a, b) => {
-                const nameA = a.name.trim().split(" ").pop();
-                const nameB = b.name.trim().split(" ").pop();
-                return nameA.localeCompare(nameB, 'vi');
+                const nA = a.name.trim().split(" ").pop();
+                const nB = b.name.trim().split(" ").pop();
+                return nA.localeCompare(nB, 'vi');
             });
 
             list.forEach(s => {
                 grid.innerHTML += `
-                    <div class="student-card p-5 rounded-3xl text-center" onclick="openStudentModal('${s.name}', '${s.birthday}', '${s.description}', '${s.avatar}')">
-                        <img src="${s.avatar}" class="w-20 h-20 rounded-full mx-auto mb-3 object-cover shadow-sm" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(s.name)}&background=2563eb&color=fff'">
-                        <h4 class="font-black text-xs uppercase text-slate-800 leading-tight">${s.name}</h4>
+                    <div class="student-card p-4 rounded-2xl text-center" onclick="openStudentModal('${s.name}', '${s.birthday}', '${s.description}', '${s.avatar}')">
+                        <img src="${s.avatar}" class="w-16 h-16 rounded-full mx-auto mb-2 object-cover border-2 border-slate-50" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(s.name)}&background=2563eb&color=fff'">
+                        <h4 class="font-black text-[10px] uppercase text-slate-700 leading-tight">${s.name}</h4>
                     </div>`;
             });
         });
     }
 
-    // --- MODAL POPUP CHI TIẾT ---
+    // --- POPUP CHI TIẾT (TOPUP) ---
     function openStudentModal(name, birthday, desc, avatar) {
         document.getElementById("detail-name").innerText = name;
-        document.getElementById("detail-birthday").innerText = birthday || "Chưa cập nhật";
+        document.getElementById("detail-birthday").innerText = birthday || "Đang cập nhật";
         document.getElementById("detail-desc").innerText = desc || "Học tập để ngày mai lập nghiệp!";
         document.getElementById("detail-avatar").src = avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name);
         document.getElementById("studentInfoModal").classList.remove("hidden");
@@ -274,19 +241,12 @@
         document.body.style.overflow = "auto";
     }
 
-    // --- MODAL ẢNH ---
     function openImageModal(src) {
         document.getElementById("modalImg").src = src;
         document.getElementById("imageModal").classList.remove("hidden");
-        document.body.style.overflow = "hidden";
-    }
-    function closeImageModal() {
-        document.getElementById("imageModal").classList.add("hidden");
-        document.body.style.overflow = "auto";
     }
 
     function logout() { auth.signOut().then(() => window.location.reload()); }
 </script>
 </body>
 </html>
-
