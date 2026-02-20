@@ -29,24 +29,36 @@
 </head>
 <body class="min-h-screen">
 
-<header class="sticky top-0 z-50 glass-card border-b border-white/10 px-6 py-4">
+<header class="sticky top-0 z-50 glass-card border-b border-white/10 px-6 py-3">
     <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <div class="flex items-center gap-3 cursor-pointer" onclick="showTab('home')">
-            <div class="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center text-slate-900 font-bold shadow-lg shadow-yellow-500/20">A5</div>
-            <h1 class="hidden md:block font-bold uppercase tracking-tighter text-yellow-500">12A5 Rạch Kiến</h1>
+        <div class="flex items-center gap-4 cursor-pointer" onclick="showTab('home')">
+            <div class="w-12 h-12 bg-yellow-500 rounded-xl flex items-center justify-center text-slate-900 font-bold shadow-lg shadow-yellow-500/20 text-xl">A5</div>
+            <div>
+                <h2 class="text-white font-bold uppercase text-[10px] md:text-xs leading-tight tracking-wider opacity-80">Sở Giáo dục và Đào tạo tỉnh Tây Ninh</h2>
+                <h1 class="text-yellow-500 font-black uppercase text-sm md:text-lg tracking-tighter">Trường THPT Rạch Kiến - Lớp 12A5</h1>
+            </div>
         </div>
 
-        <nav id="main-nav" class="flex gap-6 text-sm font-semibold uppercase tracking-widest">
-            <button onclick="showTab('home')" class="tab-link nav-active transition">🏠 Tin tức</button>
-            <button onclick="showTab('students')" class="tab-link hover:text-yellow-400 transition">👩‍🎓 Lớp học</button>
+        <nav id="main-nav" class="flex items-center gap-4 md:gap-8 text-[10px] md:text-xs font-bold uppercase tracking-widest">
+            <button onclick="showTab('home')" class="tab-link nav-active flex items-center gap-1 transition hover:text-yellow-400">
+                <span>🏠</span> <span class="hidden sm:inline">Tin tức</span>
+            </button>
+            <button onclick="showTab('students')" class="tab-link flex items-center gap-1 transition hover:text-yellow-400">
+                <span>🎓</span> <span class="hidden sm:inline">Lớp học</span>
+            </button>
+            
+            <div id="user-info" class="hidden flex items-center gap-3 bg-white/5 pl-3 pr-1 py-1 rounded-full border border-white/10">
+                <span id="nav-user-name" class="text-white hidden md:block">...</span>
+                <div class="relative">
+                    <img id="nav-avatar" src="" class="w-8 h-8 rounded-full border-2 border-yellow-500 object-cover">
+                    <button onclick="logout()" class="absolute -top-1 -right-1 bg-red-500 text-white w-4 h-4 rounded-full text-[8px] flex items-center justify-center shadow-lg">✕</button>
+                </div>
+            </div>
+            
             <button id="btnLoginOpen" onclick="document.getElementById('authModal').classList.remove('hidden')" 
-                    class="bg-yellow-500 text-slate-900 px-4 py-1.5 rounded-full text-xs font-bold hover:bg-yellow-400 transition">
+                    class="bg-yellow-500 text-slate-900 px-5 py-2 rounded-xl font-black hover:bg-yellow-400 transition transform active:scale-95 shadow-lg shadow-yellow-500/20">
                 ĐĂNG NHẬP
             </button>
-            <div id="user-info" class="hidden flex items-center gap-2">
-                <img id="nav-avatar" src="" class="w-8 h-8 rounded-full border border-yellow-500 object-cover">
-                <button onclick="logout()" class="text-red-400 text-xs hover:underline">Thoát</button>
-            </div>
         </nav>
     </div>
 </header>
@@ -181,46 +193,59 @@
         }
     }
 
-    // 4. Tải dữ liệu cá nhân
-    function loadPersonalData(email) {
-        db.collection("students").where("email", "==", email).limit(1).get()
-        .then(snap => {
-            if(!snap.empty) {
-                const d = snap.docs[0].data();
-                document.getElementById("my-name").innerText = d.name;
-                document.getElementById("nav-avatar").src = d.avatar || 'default-avatar.png';
-                document.getElementById("my-avatar").src = d.avatar || 'default-avatar.png';
-                document.getElementById("my-email").innerText = email;
-                document.getElementById("my-quote").innerText = d.description || "Thanh xuân tuyệt vời nhất là ở 12A5!";
-            }
-        });
-    }
-
-    // 5. Tải danh sách lớp
-    function loadStudentList() {
-        const grid = document.getElementById("student-grid");
-        grid.innerHTML = '<p class="col-span-full text-center animate-pulse">Đang tải danh sách...</p>';
-
-        db.collection("students").get().then(snap => {
-            grid.innerHTML = "";
-            let list = [];
-            snap.forEach(doc => list.push(doc.data()));
+   // 4. Tải dữ liệu cá nhân (Cập nhật từ Database)
+function loadPersonalData(email) {
+    db.collection("students").where("email", "==", email).limit(1).get()
+    .then(snap => {
+        if(!snap.empty) {
+            const d = snap.docs[0].data();
+            // Cập nhật tên và ảnh trên Header
+            document.getElementById("nav-user-name").innerText = d.name;
+            document.getElementById("nav-avatar").src = d.avatar || 'default-avatar.png';
             
-            // Sắp xếp theo tên
-            list.sort((a,b) => a.name.split(' ').pop().localeCompare(b.name.split(' ').pop(), 'vi'));
+            // Cập nhật Dashboard cá nhân
+            document.getElementById("my-name").innerText = d.name;
+            document.getElementById("my-avatar").src = d.avatar || 'default-avatar.png';
+            document.getElementById("my-email").innerText = email;
+            document.getElementById("my-quote").innerText = d.description || "Thanh xuân tuyệt vời nhất là ở 12A5!";
+        }
+    })
+    .catch(err => console.error("Lỗi lấy dữ liệu cá nhân:", err));
+}
 
-            list.forEach(s => {
-                grid.innerHTML += `
-                    <div class="glass-card p-4 rounded-2xl text-center group hover:border-yellow-500/50 transition-all duration-300">
-                        <img src="${s.avatar || 'default-avatar.png'}" class="w-20 h-20 rounded-full mx-auto mb-3 border-2 border-slate-700 group-hover:border-yellow-500 transition-all object-cover">
-                        <h4 class="text-xs font-bold text-white uppercase truncate">${s.name}</h4>
-                        <p class="text-[10px] text-slate-500 mt-1">${s.birthday || 'Đang cập nhật'}</p>
-                    </div>
-                `;
-            });
+// 5. Tải danh sách lớp (Render thẻ từ Database)
+function loadStudentList() {
+    const grid = document.getElementById("student-grid");
+    grid.innerHTML = '<p class="col-span-full text-center animate-pulse text-yellow-500">Đang truy xuất dữ liệu từ Database...</p>';
+
+    db.collection("students").get().then(snap => {
+        grid.innerHTML = "";
+        let list = [];
+        snap.forEach(doc => list.push(doc.data()));
+        
+        // Sắp xếp theo tên (lấy chữ cái cuối cùng)
+        list.sort((a,b) => {
+            const nameA = a.name.split(' ').pop();
+            const nameB = b.name.split(' ').pop();
+            return nameA.localeCompare(nameB, 'vi');
         });
-    }
 
+        list.forEach(s => {
+            // Tạo card học sinh với hình ảnh từ field 'avatar' trong database
+            grid.innerHTML += `
+                <div class="glass-card p-4 rounded-2xl text-center group hover:border-yellow-500/50 transition-all duration-300 shadow-lg">
+                    <div class="relative w-20 h-20 mx-auto mb-3">
+                        <img src="${s.avatar || 'default-avatar.png'}" 
+                             class="w-20 h-20 rounded-full border-2 border-slate-700 group-hover:border-yellow-500 transition-all object-cover"
+                             onerror="this.src='default-avatar.png'">
+                    </div>
+                    <h4 class="text-[11px] md:text-xs font-bold text-white uppercase truncate px-1">${s.name}</h4>
+                    <p class="text-[9px] text-slate-500 mt-1 italic">${s.birthday || 'Chưa cập nhật'}</p>
+                </div>
+            `;
+        });
+    });
+}
     function logout() { auth.signOut(); }
 </script>
 
