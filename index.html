@@ -2,9 +2,9 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8" />
-    <title>Hệ Thống Thông Tin Lớp 12A5 - THPT Rạch Kiến</title>
+    <title>Hệ Thống 12A5 - THPT Rạch Kiến</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -12,130 +12,114 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
     <style>
-        body { font-family: 'Quicksand', sans-serif; background-color: #f4f6f9; }
-        .login-gradient { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
-        .form-shadow { box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        
-        /* Hiệu ứng chữ lấp lánh nhẹ cho tiêu đề */
+        body { font-family: 'Quicksand', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .nav-active { color: #facc15; border-bottom: 2px solid #facc15; }
         .animate-glow {
-            background: linear-gradient(90deg, #1e3a8a, #3b82f6, #1e3a8a);
+            background: linear-gradient(90deg, #fbbf24, #f59e0b, #fbbf24);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: shine 4s linear infinite;
+            animation: shine 3s linear infinite;
         }
         @keyframes shine { to { background-position: 200% center; } }
-
-        /* Animation cho Dashboard */
-        .fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="min-h-screen">
 
-<div class="bg-white border-b border-gray-200 py-3 px-6 flex justify-between items-center sticky top-0 z-50">
-    <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-blue-900 rounded-lg flex items-center justify-center text-white font-bold shadow-lg">A5</div>
-        <div>
-            <h1 class="text-blue-900 font-bold uppercase text-xs md:text-sm leading-tight">Sở Giáo Dục và Đào Tạo tỉnh Tây Ninh</h1>
-            <p class="text-blue-700 text-[10px] md:text-xs font-medium uppercase tracking-wider">Trường THPT Rạch Kiến - Lớp 12A5</p>
+<header class="sticky top-0 z-50 glass-card border-b border-white/10 px-6 py-4">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="showTab('home')">
+            <div class="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center text-slate-900 font-bold shadow-lg shadow-yellow-500/20">A5</div>
+            <h1 class="hidden md:block font-bold uppercase tracking-tighter text-yellow-500">12A5 Rạch Kiến</h1>
         </div>
+
+        <nav id="main-nav" class="flex gap-6 text-sm font-semibold uppercase tracking-widest">
+            <button onclick="showTab('home')" class="tab-link nav-active transition">🏠 Tin tức</button>
+            <button onclick="showTab('students')" class="tab-link hover:text-yellow-400 transition">👩‍🎓 Lớp học</button>
+            <button id="btnLoginOpen" onclick="document.getElementById('authModal').classList.remove('hidden')" 
+                    class="bg-yellow-500 text-slate-900 px-4 py-1.5 rounded-full text-xs font-bold hover:bg-yellow-400 transition">
+                ĐĂNG NHẬP
+            </button>
+            <div id="user-info" class="hidden flex items-center gap-2">
+                <img id="nav-avatar" src="" class="w-8 h-8 rounded-full border border-yellow-500 object-cover">
+                <button onclick="logout()" class="text-red-400 text-xs hover:underline">Thoát</button>
+            </div>
+        </nav>
     </div>
-    <div id="user-nav" class="hidden flex items-center gap-3 bg-blue-50 px-3 py-1.5 rounded-full border border-blue-100">
-        <img id="nav-avatar" src="default-avatar.png" class="w-7 h-7 rounded-full border border-blue-500 object-cover">
-        <span id="user-name-nav" class="text-blue-900 text-xs font-bold truncate max-w-[100px]">...</span>
-        <button onclick="logout()" class="text-red-500 hover:text-red-700 text-xs font-bold ml-2">Đăng xuất</button>
+</header>
+
+<main class="max-w-7xl mx-auto p-6">
+    
+    <section id="tab-home" class="tab-content grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-6">
+            <h2 class="text-2xl font-bold flex items-center gap-2">
+                <span class="w-2 h-8 bg-yellow-500 rounded-full"></span> 📣 Bảng tin 12A5
+            </h2>
+            
+            <div class="glass-card p-6 rounded-3xl space-y-4">
+                <div class="flex justify-between items-start">
+                    <span class="bg-blue-500/20 text-blue-400 text-[10px] px-3 py-1 rounded-full font-bold uppercase">Thông báo</span>
+                    <span class="text-slate-500 text-xs">20/02/2026</span>
+                </div>
+                <h3 class="text-xl font-bold text-yellow-500">Kế hoạch Hội Xuân 2026</h3>
+                <p class="text-slate-300 text-sm leading-relaxed">Chuẩn bị cho hội xuân sắp tới, lớp chúng mình sẽ triển khai gian hàng ẩm thực. Các thành viên tổ hậu cần tập trung lúc 15h tại phòng học để chốt menu nhé!</p>
+                <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800" class="w-full h-48 object-cover rounded-2xl opacity-80">
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div id="welcome-box" class="glass-card p-8 rounded-3xl border-yellow-500/20 shadow-2xl">
+                <h2 class="text-3xl font-black mb-4 animate-glow uppercase">Chào mừng 12A5!</h2>
+                <p class="text-slate-400 text-sm leading-relaxed">Đăng nhập để xem thông tin cá nhân và cập nhật kết quả học tập của bạn.</p>
+            </div>
+
+            <div id="personal-profile" class="hidden glass-card p-6 rounded-3xl border-yellow-500/50 relative overflow-hidden">
+                <div class="absolute -top-4 -right-4 text-6xl opacity-10 rotate-12">🎓</div>
+                <div class="flex items-center gap-4 mb-6">
+                    <img id="my-avatar" src="" class="w-16 h-16 rounded-full border-2 border-yellow-500 shadow-xl object-cover">
+                    <div>
+                        <h3 id="my-name" class="font-bold text-lg text-white uppercase">...</h3>
+                        <p id="my-email" class="text-slate-500 text-xs">...</p>
+                    </div>
+                </div>
+                <div class="bg-slate-900/50 p-4 rounded-2xl italic text-slate-300 text-xs border-l-2 border-yellow-500">
+                    "<span id="my-quote">...</span>"
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tab-students" class="tab-content hidden space-y-8">
+        <div class="text-center space-y-2">
+            <h2 class="text-3xl font-bold text-yellow-500 uppercase tracking-tighter">Đại gia đình 12A5</h2>
+            <p class="text-slate-400 text-sm">Tổng số: 45 thành viên ưu tú</p>
+        </div>
+        <div id="student-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            </div>
+    </section>
+</main>
+
+<div id="authModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden z-[100] flex items-center justify-center p-4">
+    <div class="glass-card w-full max-w-sm rounded-3xl p-8 relative shadow-2xl border-white/20">
+        <button onclick="document.getElementById('authModal').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 hover:text-white">&times;</button>
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 bg-yellow-500 rounded-2xl mx-auto flex items-center justify-center text-3xl mb-4 shadow-lg shadow-yellow-500/20">🔑</div>
+            <h3 class="text-xl font-bold">Xác thực thành viên</h3>
+        </div>
+        <div class="space-y-4">
+            <input id="loginEmail" type="text" placeholder="Số CCCD hoặc Email" class="w-full bg-slate-800 border border-slate-700 p-4 rounded-xl outline-none focus:border-yellow-500 transition-all">
+            <input id="loginPass" type="password" placeholder="Mật khẩu" class="w-full bg-slate-800 border border-slate-700 p-4 rounded-xl outline-none focus:border-yellow-500 transition-all">
+            <p id="loginError" class="text-red-400 text-xs text-center hidden"></p>
+            <button onclick="handleLogin()" class="w-full bg-yellow-500 text-slate-950 font-bold py-4 rounded-xl hover:bg-yellow-400 transition-transform active:scale-95 shadow-xl shadow-yellow-500/10">VÀO LỚP NGAY</button>
+        </div>
     </div>
 </div>
 
-<main class="min-h-[calc(100vh-140px)] flex flex-col lg:flex-row items-center justify-center p-6 gap-12">
-    
-    <div id="welcome-section" class="w-full lg:w-1/2 max-w-xl">
-        <h2 class="text-4xl font-black text-blue-900 mb-4 uppercase leading-tight animate-glow">
-            Cổng thông tin <br>thành viên lớp 12A5
-        </h2>
-        <p class="text-gray-600 mb-8 leading-relaxed">
-            Hệ thống quản lý thông tin, hành trình 3 năm thanh xuân và bảng vàng thành tích của tập thể lớp 12A5 - THPT Rạch Kiến niên khóa 2023-2026.
-        </p>
-        <div class="grid grid-cols-2 gap-6">
-            <div class="bg-white p-5 rounded-2xl border-l-4 border-blue-600 shadow-sm">
-                <span class="block font-black text-2xl text-blue-800">45</span>
-                <span class="text-sm font-medium text-gray-500 uppercase tracking-tighter">Thành viên chính thức</span>
-            </div>
-            <div class="bg-white p-5 rounded-2xl border-l-4 border-orange-500 shadow-sm">
-                <span class="block font-black text-2xl text-orange-600">2026</span>
-                <span class="text-sm font-medium text-gray-500 uppercase tracking-tighter">Năm tốt nghiệp</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="w-full max-w-md">
-        
-        <div id="login-container" class="bg-white rounded-2xl overflow-hidden form-shadow border border-gray-100">
-            <div class="login-gradient p-8 text-white text-center">
-                <h3 class="text-xl font-bold uppercase tracking-widest">Hệ Thống Nội Bộ</h3>
-                <p class="text-blue-100 text-xs mt-2 opacity-80">Vui lòng đăng nhập để xem thông tin cá nhân</p>
-            </div>
-            
-            <div class="p-8 space-y-5">
-                <div>
-                    <label class="block text-gray-700 text-xs font-bold mb-2 uppercase ml-1">Tài khoản (CCCD/Email)</label>
-                    <input id="loginCCCD" type="text" placeholder="Nhập tài khoản của bạn" 
-                           class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm">
-                </div>
-
-                <div>
-                    <label class="block text-gray-700 text-xs font-bold mb-2 uppercase ml-1">Mật khẩu</label>
-                    <input id="loginPass" type="password" placeholder="••••••••" 
-                           class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm">
-                </div>
-
-                <p id="loginError" class="text-red-600 text-xs text-center hidden bg-red-50 py-2 rounded-lg border border-red-100"></p>
-
-                <button onclick="handleLogin()" 
-                        class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-blue-200 transform active:scale-[0.98] transition-all uppercase text-sm tracking-widest">
-                    Đăng nhập ngay
-                </button>
-            </div>
-        </div>
-
-        <div id="personal-dashboard" class="hidden fade-in-up">
-            <div class="bg-white rounded-3xl border border-blue-100 shadow-2xl overflow-hidden relative">
-                <div class="h-24 login-gradient w-full"></div>
-                <div class="px-6 pb-8 text-center -mt-12">
-                    <img id="my-avatar" src="default-avatar.png" 
-                         class="w-24 h-24 rounded-full border-4 border-white mx-auto object-cover shadow-md bg-white">
-                    
-                    <div class="mt-4">
-                        <h2 id="my-name" class="text-2xl font-black text-blue-900 uppercase">Đang tải...</h2>
-                        <p id="my-email" class="text-gray-500 text-sm mb-4">email@a5.com</p>
-                        
-                        <div class="inline-block px-4 py-1 bg-blue-100 text-blue-700 rounded-full text-[10px] font-bold uppercase mb-6">
-                            Thành viên lớp 12A5
-                        </div>
-
-                        <div class="bg-gray-50 p-4 rounded-2xl italic text-gray-600 border-l-4 border-blue-500 text-sm relative">
-                            <span class="text-3xl text-blue-200 absolute -top-2 left-2 font-serif">“</span>
-                            <span id="my-quote">Hành trình vạn dặm bắt đầu từ một bước chân.</span>
-                            <span class="text-3xl text-blue-200 absolute -bottom-6 right-2 font-serif">”</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</main>
-
-<footer class="text-center text-gray-400 text-[10px] py-8 uppercase tracking-[0.2em]">
-    &copy; 2026 THPT Rạch Kiến - Tập thể lớp 12A5
-</footer>
-
 <script>
-    // --- CẤU HÌNH FIREBASE ---
+    // --- FIREBASE CONFIG ---
     const firebaseConfig = { 
         apiKey: "AIzaSyC8DW3w2ZbhZ8tnAA6ZJ-BQ69JMu0yVtzQ",
         authDomain: "dsclass12a5.firebaseapp.com",
@@ -144,92 +128,100 @@
         messagingSenderId: "542384706583",
         appId: "1:542384706583:web:10b1e914b5479cc93fb852"
     }; 
-    
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // 1. Theo dõi trạng thái đăng nhập
+    // 1. Chuyển Tab
+    function showTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('.tab-link').forEach(el => el.classList.remove('nav-active'));
+        
+        document.getElementById('tab-' + tabName).classList.remove('hidden');
+        event.currentTarget.classList.add('nav-active');
+
+        if(tabName === 'students') loadStudentList();
+    }
+
+    // 2. Auth Observer
     auth.onAuthStateChanged((user) => {
-        const loginForm = document.getElementById("login-container");
-        const dashboard = document.getElementById("personal-dashboard");
-        const userNav = document.getElementById("user-nav");
-        const welcome = document.getElementById("welcome-section");
+        const btnLogin = document.getElementById("btnLoginOpen");
+        const userInfo = document.getElementById("user-info");
+        const welcome = document.getElementById("welcome-box");
+        const profile = document.getElementById("personal-profile");
 
         if (user) {
-            loginForm.classList.add("hidden");
-            welcome.classList.add("hidden"); // Thu gọn giới thiệu để tập trung vào hồ sơ
-            dashboard.classList.remove("hidden");
-            userNav.classList.remove("hidden");
-            loadUserProfile(user.email);
+            btnLogin.classList.add("hidden");
+            userInfo.classList.remove("hidden");
+            welcome.classList.add("hidden");
+            profile.classList.remove("hidden");
+            loadPersonalData(user.email);
         } else {
-            loginForm.classList.remove("hidden");
+            btnLogin.classList.remove("hidden");
+            userInfo.classList.add("hidden");
             welcome.classList.remove("hidden");
-            dashboard.classList.add("hidden");
-            userNav.classList.add("hidden");
+            profile.classList.add("hidden");
         }
     });
 
-    // 2. Hàm xử lý Đăng nhập
+    // 3. Xử lý Đăng nhập
     async function handleLogin() {
-        const input = document.getElementById("loginCCCD").value.trim();
+        const input = document.getElementById("loginEmail").value.trim();
         const pass = document.getElementById("loginPass").value;
-        const errorMsg = document.getElementById("loginError");
-        
-        if(!input || !pass) {
-            showError("Vui lòng điền đầy đủ thông tin!");
-            return;
-        }
+        const err = document.getElementById("loginError");
 
-        // Hỗ trợ đăng nhập bằng cả Email hoặc Số CCCD (CCCD tự nối đuôi @a5.com)
-        let email = input;
-        if (!input.includes("@")) {
-            email = input + "@a5.com";
-        }
+        let email = input.includes("@") ? input : input + "@a5.com";
 
         try {
             await auth.signInWithEmailAndPassword(email, pass);
-            errorMsg.classList.add("hidden");
-        } catch (error) {
-            showError("Tài khoản hoặc mật khẩu không chính xác!");
+            document.getElementById("authModal").classList.add("hidden");
+        } catch (e) {
+            err.innerText = "Thông tin không chính xác!";
+            err.classList.remove("hidden");
         }
     }
 
-    // 3. Hàm tải hồ sơ học sinh từ Firestore
-    function loadUserProfile(email) {
+    // 4. Tải dữ liệu cá nhân
+    function loadPersonalData(email) {
         db.collection("students").where("email", "==", email).limit(1).get()
-        .then((snapshot) => {
-            if (!snapshot.empty) {
-                const data = snapshot.docs[0].data();
-                // Đổ dữ liệu vào Dashboard
-                document.getElementById("my-name").innerText = data.name;
-                document.getElementById("my-avatar").src = data.avatar || 'https://ui-avatars.com/api/?name=' + data.name + '&background=1e3a8a&color=fff';
+        .then(snap => {
+            if(!snap.empty) {
+                const d = snap.docs[0].data();
+                document.getElementById("my-name").innerText = d.name;
+                document.getElementById("nav-avatar").src = d.avatar || 'default-avatar.png';
+                document.getElementById("my-avatar").src = d.avatar || 'default-avatar.png';
                 document.getElementById("my-email").innerText = email;
-                document.getElementById("my-quote").innerText = data.description || "Quyết tâm đậu nguyện vọng 1!";
-                
-                // Đổ dữ liệu vào Navbar
-                document.getElementById("user-name-nav").innerText = data.name;
-                document.getElementById("nav-avatar").src = data.avatar || 'default-avatar.png';
+                document.getElementById("my-quote").innerText = d.description || "Thanh xuân tuyệt vời nhất là ở 12A5!";
             }
         });
     }
 
-    function showError(msg) {
-        const errorMsg = document.getElementById("loginError");
-        errorMsg.innerText = msg;
-        errorMsg.classList.remove("hidden");
+    // 5. Tải danh sách lớp
+    function loadStudentList() {
+        const grid = document.getElementById("student-grid");
+        grid.innerHTML = '<p class="col-span-full text-center animate-pulse">Đang tải danh sách...</p>';
+
+        db.collection("students").get().then(snap => {
+            grid.innerHTML = "";
+            let list = [];
+            snap.forEach(doc => list.push(doc.data()));
+            
+            // Sắp xếp theo tên
+            list.sort((a,b) => a.name.split(' ').pop().localeCompare(b.name.split(' ').pop(), 'vi'));
+
+            list.forEach(s => {
+                grid.innerHTML += `
+                    <div class="glass-card p-4 rounded-2xl text-center group hover:border-yellow-500/50 transition-all duration-300">
+                        <img src="${s.avatar || 'default-avatar.png'}" class="w-20 h-20 rounded-full mx-auto mb-3 border-2 border-slate-700 group-hover:border-yellow-500 transition-all object-cover">
+                        <h4 class="text-xs font-bold text-white uppercase truncate">${s.name}</h4>
+                        <p class="text-[10px] text-slate-500 mt-1">${s.birthday || 'Đang cập nhật'}</p>
+                    </div>
+                `;
+            });
+        });
     }
 
-    function logout() {
-        if(confirm("Bạn muốn đăng xuất khỏi hệ thống?")) {
-            auth.signOut();
-        }
-    }
-
-    // Enter để đăng nhập
-    document.getElementById("loginPass").addEventListener("keypress", (e) => {
-        if(e.key === "Enter") handleLogin();
-    });
+    function logout() { auth.signOut(); }
 </script>
 
 </body>
