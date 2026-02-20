@@ -2,20 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8" />
-    <title>Hệ Thống 12A5 - THPT Rạch Kiến</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-    <style><!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8" />
-    <title>Hệ Thống 12A5 - THPT Rạch Kiến</title>
+    <title>QLGD 12A5 - THPT Rạch Kiến</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -25,126 +12,159 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
     <style>
-        body { font-family: 'Quicksand', sans-serif; background-color: #0f172a; color: #f8fafc; }
-        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .nav-active { color: #facc15; border-bottom: 2px solid #facc15; }
-        .animate-glow {
-            background: linear-gradient(90deg, #fbbf24, #f59e0b, #fbbf24);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shine 3s linear infinite;
-        }
+        body { font-family: 'Quicksand', sans-serif; background-color: #0f172a; color: #f8fafc; overflow-x: hidden; }
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); }
+        .nav-active { color: #facc15; border-bottom: 3px solid #facc15; }
+        .animate-glow { background: linear-gradient(90deg, #fbbf24, #f59e0b, #fbbf24); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 3s linear infinite; }
         @keyframes shine { to { background-position: 200% center; } }
+        .student-card:hover { transform: translateY(-5px); border-color: #facc15; }
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     </style>
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen pb-10">
 
-<header class="sticky top-0 z-50 glass-card border-b border-white/10 px-6 py-3">
+<header class="sticky top-0 z-50 glass-card border-b border-white/10 px-4 md:px-8 py-3">
     <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <div class="flex items-center gap-4 cursor-pointer" onclick="showTab('home')">
-            <div class="w-12 h-12 bg-yellow-500 rounded-xl flex items-center justify-center text-slate-900 font-bold shadow-lg shadow-yellow-500/20 text-xl">A5</div>
-            <div>
-                <h2 class="text-white font-bold uppercase text-[10px] md:text-xs leading-tight tracking-wider opacity-80">Sở Giáo dục và Đào tạo tỉnh Tây Ninh</h2>
-                <h1 class="text-yellow-500 font-black uppercase text-sm md:text-lg tracking-tighter">Trường THPT Rạch Kiến - Lớp 12A5</h1>
+        <div class="flex items-center gap-3 cursor-pointer" onclick="showTab('home')">
+            <div class="w-12 h-12 bg-yellow-500 rounded-2xl flex items-center justify-center text-slate-900 font-black shadow-lg text-xl shadow-yellow-500/20">A5</div>
+            <div class="leading-tight">
+                <h2 class="text-white font-bold uppercase text-[9px] md:text-[11px] opacity-70 tracking-widest">Sở Giáo dục và Đào tạo tỉnh Tây Ninh</h2>
+                <h1 class="text-yellow-500 font-black uppercase text-[12px] md:text-lg">THPT Rạch Kiến - 12A5</h1>
             </div>
         </div>
 
-        <nav id="main-nav" class="flex items-center gap-4 md:gap-8 text-[10px] md:text-xs font-bold uppercase tracking-widest">
-            <button onclick="showTab('home')" class="tab-link nav-active flex items-center gap-1 transition hover:text-yellow-400">
-                <span>🏠</span> <span class="hidden sm:inline">Tin tức</span>
-            </button>
-            <button onclick="showTab('students')" class="tab-link flex items-center gap-1 transition hover:text-yellow-400">
-                <span>🎓</span> <span class="hidden sm:inline">Lớp học</span>
-            </button>
+        <nav class="flex items-center gap-4 md:gap-8 text-[11px] font-bold uppercase tracking-wider">
+            <button onclick="showTab('home')" class="tab-link nav-active py-2 transition hover:text-yellow-400">Tin tức</button>
+            <button onclick="showTab('students')" class="tab-link py-2 transition hover:text-yellow-400">Lớp học</button>
             
-            <div id="user-info" class="hidden flex items-center gap-3 bg-white/5 pl-3 pr-1 py-1 rounded-full border border-white/10">
-                <span id="nav-user-name" class="text-white hidden md:block">...</span>
-                <div class="relative">
-                    <img id="nav-avatar" src="" class="w-8 h-8 rounded-full border-2 border-yellow-500 object-cover">
-                    <button onclick="logout()" class="absolute -top-1 -right-1 bg-red-500 text-white w-4 h-4 rounded-full text-[8px] flex items-center justify-center shadow-lg">✕</button>
+            <div id="user-info" class="hidden flex items-center gap-3">
+                <div class="text-right hidden sm:block">
+                    <p id="nav-user-name" class="text-white text-[10px] font-bold leading-none">...</p>
+                    <span class="text-yellow-500 text-[9px] opacity-80">Học sinh</span>
+                </div>
+                <div class="relative group cursor-pointer" onclick="logout()">
+                    <img id="nav-avatar" src="" class="w-9 h-9 rounded-full border-2 border-yellow-500 object-cover shadow-lg shadow-yellow-500/10">
+                    <div class="absolute inset-0 bg-red-500 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-[10px] font-black">OUT</div>
                 </div>
             </div>
             
             <button id="btnLoginOpen" onclick="document.getElementById('authModal').classList.remove('hidden')" 
-                    class="bg-yellow-500 text-slate-900 px-5 py-2 rounded-xl font-black hover:bg-yellow-400 transition transform active:scale-95 shadow-lg shadow-yellow-500/20">
+                    class="bg-yellow-500 text-slate-900 px-4 py-2 rounded-xl font-black text-[10px] hover:bg-yellow-400 transition-all shadow-lg shadow-yellow-500/20">
                 ĐĂNG NHẬP
             </button>
         </nav>
     </div>
 </header>
 
-<main class="max-w-7xl mx-auto p-6">
+<main class="max-w-7xl mx-auto p-4 md:p-8">
     
-    <section id="tab-home" class="tab-content grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div class="lg:col-span-2 space-y-6">
-            <h2 class="text-2xl font-bold flex items-center gap-2">
-                <span class="w-2 h-8 bg-yellow-500 rounded-full"></span> 📣 Bảng tin 12A5
-            </h2>
+    <section id="tab-home" class="tab-content grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-8 space-y-6">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-1.5 h-6 bg-yellow-500 rounded-full"></div>
+                <h2 class="text-xl font-black uppercase tracking-tight">Bảng tin hệ thống</h2>
+            </div>
             
-            <div class="glass-card p-6 rounded-3xl space-y-4">
-                <div class="flex justify-between items-start">
-                    <span class="bg-blue-500/20 text-blue-400 text-[10px] px-3 py-1 rounded-full font-bold uppercase">Thông báo</span>
-                    <span class="text-slate-500 text-xs">20/02/2026</span>
+            <div class="glass-card rounded-[2rem] overflow-hidden group">
+                <div class="relative overflow-hidden h-64">
+                    <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=1200" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
+                    <span class="absolute top-4 left-4 bg-yellow-500 text-slate-900 text-[10px] font-bold px-4 py-1.5 rounded-full uppercase">Sự kiện mới</span>
                 </div>
-                <h3 class="text-xl font-bold text-yellow-500">Kế hoạch Hội Xuân 2026</h3>
-                <p class="text-slate-300 text-sm leading-relaxed">Chuẩn bị cho hội xuân sắp tới, lớp chúng mình sẽ triển khai gian hàng ẩm thực. Các thành viên tổ hậu cần tập trung lúc 15h tại phòng học để chốt menu nhé!</p>
-                <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800" class="w-full h-48 object-cover rounded-2xl opacity-80">
+                <div class="p-8">
+                    <div class="flex items-center gap-4 text-slate-500 text-[11px] mb-4 font-bold uppercase tracking-widest">
+                        <span>📅 20/02/2026</span>
+                        <span>👤 Ban cán sự lớp</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-yellow-500 mb-4 uppercase">Kế hoạch Hội Xuân & Gian hàng ẩm thực 12A5</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                        Chào các thành viên 12A5! Chúng ta sẽ bắt đầu triển khai trang trí gian hàng từ chiều thứ 6 tuần này. Đề nghị các tổ trưởng báo cáo danh sách nguyên liệu và phân công nhân sự trực gian hàng cho lớp trưởng.
+                    </p>
+                    <button class="text-yellow-500 text-xs font-black uppercase border-b-2 border-yellow-500/30 hover:border-yellow-500 pb-1 transition-all">Xem chi tiết thông báo</button>
+                </div>
             </div>
         </div>
 
-        <div class="space-y-6">
-            <div id="welcome-box" class="glass-card p-8 rounded-3xl border-yellow-500/20 shadow-2xl">
-                <h2 class="text-3xl font-black mb-4 animate-glow uppercase">Chào mừng 12A5!</h2>
-                <p class="text-slate-400 text-sm leading-relaxed">Đăng nhập để xem thông tin cá nhân và cập nhật kết quả học tập của bạn.</p>
+        <div class="lg:col-span-4 space-y-6">
+            <div id="welcome-box" class="glass-card p-8 rounded-[2rem] text-center border-dashed border-white/20">
+                <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">👋</div>
+                <h2 class="text-xl font-bold mb-2">Xin chào!</h2>
+                <p class="text-slate-500 text-xs leading-relaxed">Vui lòng đăng nhập bằng mã định danh (CCCD) để xem hồ sơ và kết quả học tập cá nhân.</p>
             </div>
 
-            <div id="personal-profile" class="hidden glass-card p-6 rounded-3xl border-yellow-500/50 relative overflow-hidden">
-                <div class="absolute -top-4 -right-4 text-6xl opacity-10 rotate-12">🎓</div>
-                <div class="flex items-center gap-4 mb-6">
-                    <img id="my-avatar" src="" class="w-16 h-16 rounded-full border-2 border-yellow-500 shadow-xl object-cover">
-                    <div>
-                        <h3 id="my-name" class="font-bold text-lg text-white uppercase">...</h3>
-                        <p id="my-email" class="text-slate-500 text-xs">...</p>
+            <div id="personal-profile" class="hidden glass-card p-1 rounded-[2.5rem] overflow-hidden">
+                <div class="bg-gradient-to-br from-yellow-500/20 to-transparent p-8 rounded-[2.4rem]">
+                    <div class="text-center">
+                        <div class="relative inline-block mb-4">
+                            <img id="my-avatar" src="" class="w-24 h-24 rounded-full border-4 border-yellow-500 p-1 object-cover shadow-2xl">
+                            <div class="absolute bottom-1 right-1 bg-green-500 w-5 h-5 rounded-full border-4 border-slate-900"></div>
+                        </div>
+                        <h3 id="my-name" class="text-xl font-black text-white uppercase tracking-tighter">...</h3>
+                        <p id="my-email" class="text-yellow-500 text-[10px] font-bold mb-6">...</p>
+                        
+                        <div class="grid grid-cols-2 gap-3 mb-6">
+                            <div class="bg-white/5 p-3 rounded-2xl">
+                                <span class="block text-[10px] text-slate-500 font-bold uppercase">Lớp</span>
+                                <span class="text-white font-bold">12A5</span>
+                            </div>
+                            <div class="bg-white/5 p-3 rounded-2xl">
+                                <span class="block text-[10px] text-slate-500 font-bold uppercase">Niên khóa</span>
+                                <span class="text-white font-bold">2023-26</span>
+                            </div>
+                        </div>
+
+                        <div class="relative bg-slate-900/50 p-5 rounded-2xl italic text-slate-300 text-[11px] leading-relaxed border border-white/5">
+                            "<span id="my-quote">...</span>"
+                        </div>
                     </div>
-                </div>
-                <div class="bg-slate-900/50 p-4 rounded-2xl italic text-slate-300 text-xs border-l-2 border-yellow-500">
-                    "<span id="my-quote">...</span>"
                 </div>
             </div>
         </div>
     </section>
 
     <section id="tab-students" class="tab-content hidden space-y-8">
-        <div class="text-center space-y-2">
-            <h2 class="text-3xl font-bold text-yellow-500 uppercase tracking-tighter">Đại gia đình 12A5</h2>
-            <p class="text-slate-400 text-sm">Tổng số: 45 thành viên ưu tú</p>
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h2 class="text-2xl font-black uppercase flex items-center gap-3">
+                    <span class="w-2 h-8 bg-yellow-500 rounded-full"></span> Thành viên lớp 12A5
+                </h2>
+                <p class="text-slate-500 text-[11px] font-bold uppercase tracking-widest mt-1">Hệ thống quản lý dữ liệu học sinh</p>
+            </div>
+            <div class="text-right">
+                <span class="bg-yellow-500 text-slate-950 px-4 py-1.5 rounded-full text-[10px] font-black uppercase">Sĩ số: 45</span>
+            </div>
         </div>
-        <div id="student-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+        <div id="student-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
             </div>
     </section>
 </main>
 
-<div id="authModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden z-[100] flex items-center justify-center p-4">
-    <div class="glass-card w-full max-w-sm rounded-3xl p-8 relative shadow-2xl border-white/20">
-        <button onclick="document.getElementById('authModal').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 hover:text-white">&times;</button>
+<div id="authModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-xl hidden z-[100] flex items-center justify-center p-4">
+    <div class="glass-card w-full max-w-sm rounded-[2.5rem] p-10 relative overflow-hidden">
         <div class="text-center mb-8">
-            <div class="w-16 h-16 bg-yellow-500 rounded-2xl mx-auto flex items-center justify-center text-3xl mb-4 shadow-lg shadow-yellow-500/20">🔑</div>
-            <h3 class="text-xl font-bold">Xác thực thành viên</h3>
+            <div class="w-16 h-16 bg-yellow-500 rounded-2xl mx-auto flex items-center justify-center text-3xl mb-4 shadow-xl shadow-yellow-500/20">🔐</div>
+            <h3 class="text-2xl font-black text-white uppercase tracking-tighter">Đăng nhập</h3>
+            <p class="text-slate-500 text-xs mt-2">Hệ thống QLGD THPT Rạch Kiến</p>
         </div>
         <div class="space-y-4">
-            <input id="loginEmail" type="text" placeholder="Số CCCD hoặc Email" class="w-full bg-slate-800 border border-slate-700 p-4 rounded-xl outline-none focus:border-yellow-500 transition-all">
-            <input id="loginPass" type="password" placeholder="Mật khẩu" class="w-full bg-slate-800 border border-slate-700 p-4 rounded-xl outline-none focus:border-yellow-500 transition-all">
-            <p id="loginError" class="text-red-400 text-xs text-center hidden"></p>
-            <button onclick="handleLogin()" class="w-full bg-yellow-500 text-slate-950 font-bold py-4 rounded-xl hover:bg-yellow-400 transition-transform active:scale-95 shadow-xl shadow-yellow-500/10">VÀO LỚP NGAY</button>
+            <div class="space-y-1">
+                <label class="text-[10px] font-black text-slate-500 uppercase ml-2">Số CCCD (Tài khoản)</label>
+                <input id="loginEmail" type="text" placeholder="Ví dụ: 07220xxxx" class="w-full bg-slate-800/50 border border-white/10 p-4 rounded-2xl outline-none focus:border-yellow-500 transition-all text-sm font-bold">
+            </div>
+            <div class="space-y-1">
+                <label class="text-[10px] font-black text-slate-500 uppercase ml-2">Mật khẩu hệ thống</label>
+                <input id="loginPass" type="password" placeholder="••••••••" class="w-full bg-slate-800/50 border border-white/10 p-4 rounded-2xl outline-none focus:border-yellow-500 transition-all text-sm">
+            </div>
+            <p id="loginError" class="text-red-400 text-[10px] text-center font-bold hidden bg-red-500/10 py-2 rounded-lg"></p>
+            <button onclick="handleLogin()" class="w-full bg-yellow-500 text-slate-950 font-black py-4 rounded-2xl hover:bg-yellow-400 transition-all shadow-xl shadow-yellow-500/10 text-sm uppercase tracking-widest mt-2">Xác thực ngay</button>
         </div>
+        <button onclick="document.getElementById('authModal').classList.add('hidden')" class="w-full mt-4 text-slate-500 text-[10px] font-bold uppercase hover:text-white transition-all tracking-widest">Đóng</button>
     </div>
 </div>
 
 <script>
-    // --- FIREBASE CONFIG ---
+    // --- CẤU HÌNH FIREBASE ---
     const firebaseConfig = { 
         apiKey: "AIzaSyC8DW3w2ZbhZ8tnAA6ZJ-BQ69JMu0yVtzQ",
         authDomain: "dsclass12a5.firebaseapp.com",
@@ -157,302 +177,16 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // 1. Chuyển Tab
+    // 1. Chuyển Tab mượt
     function showTab(tabName) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
         document.querySelectorAll('.tab-link').forEach(el => el.classList.remove('nav-active'));
-        
         document.getElementById('tab-' + tabName).classList.remove('hidden');
         event.currentTarget.classList.add('nav-active');
-
         if(tabName === 'students') loadStudentList();
     }
 
-    // Lắng nghe trạng thái đăng nhập
-auth.onAuthStateChanged((user) => {
-    const loginForm = document.getElementById("login-container");
-    const dashboard = document.getElementById("personal-dashboard");
-    const welcomeText = document.querySelector(".lg\\:block"); // Phần text giới thiệu bên trái
-
-    if (user) {
-        // Đã đăng nhập
-        loginForm.classList.add("hidden");
-        if(welcomeText) welcomeText.classList.add("hidden"); // Ẩn giới thiệu khi vào dashboard
-        dashboard.classList.remove("hidden");
-        loadUserProfile(user.email);
-    } else {
-        // Đã đăng xuất
-        loginForm.classList.remove("hidden");
-        if(welcomeText) welcomeText.classList.remove("hidden");
-        dashboard.classList.add("hidden");
-        resetDashboard();
-    }
-});
-
-   // Hàm xử lý Đăng nhập
-async function handleLogin() {
-    const cccd = document.getElementById("loginCCCD").value.trim();
-    const pass = document.getElementById("loginPass").value;
-    const errorMsg = document.getElementById("loginError");
-    const loginBtn = event.target;
-
-    if(!cccd || !pass) {
-        showError("Vui lòng nhập đầy đủ thông tin!");
-        return;
-    }
-
-    // Hiệu ứng đang tải
-    loginBtn.disabled = true;
-    loginBtn.innerText = "Đang xác thực...";
-
-    try {
-        // Tạo email ảo dựa trên CCCD để dùng Firebase Auth
-        const emailVirtual = cccd + "@a5.com";
-        await auth.signInWithEmailAndPassword(emailVirtual, pass);
-    } catch (error) {
-        showError("CCCD hoặc mật khẩu không đúng!");
-        loginBtn.disabled = false;
-        loginBtn.innerText = "Đăng nhập ngay";
-    }
-}
-
-   // 4. Tải dữ liệu cá nhân (Cập nhật từ Database)
-function loadPersonalData(email) {
-    db.collection("students").where("email", "==", email).limit(1).get()
-    .then(snap => {
-        if(!snap.empty) {
-            const d = snap.docs[0].data();
-            // Cập nhật tên và ảnh trên Header
-            document.getElementById("nav-user-name").innerText = d.name;
-            document.getElementById("nav-avatar").src = d.avatar || 'default-avatar.png';
-            
-            // Cập nhật Dashboard cá nhân
-            document.getElementById("my-name").innerText = d.name;
-            document.getElementById("my-avatar").src = d.avatar || 'default-avatar.png';
-            document.getElementById("my-email").innerText = email;
-            document.getElementById("my-quote").innerText = d.description || "Thanh xuân tuyệt vời nhất là ở 12A5!";
-        }
-    })
-    .catch(err => console.error("Lỗi lấy dữ liệu cá nhân:", err));
-}
-// Hàm tải dữ liệu từ Firestore
-function loadUserProfile(email) {
-    const cccdFromEmail = email.split('@')[0];
-    
-    db.collection("students").where("cccd", "==", cccdFromEmail).limit(1).get()
-    .then((snapshot) => {
-        if (!snapshot.empty) {
-            const data = snapshot.docs[0].data();
-            // Đổ dữ liệu vào giao diện
-            document.getElementById("my-name").innerText = data.name || "N/A";
-            document.getElementById("my-avatar").src = data.avatar || 'https://ui-avatars.com/api/?name=' + data.name;
-            document.getElementById("my-email").innerText = data.email || "Chưa cập nhật"; 
-            document.getElementById("my-cccd-display").innerText = data.cccd;
-            document.getElementById("my-birthday").innerText = data.birthday || "Chưa cập nhật";
-            document.getElementById("my-quote").innerText = data.description || "Thanh xuân là một giai điệu đẹp...";
-        }
-    })
-    .catch(err => console.error("Lỗi tải dữ liệu:", err));
-}
-
-function showError(msg) {
-    const errorMsg = document.getElementById("loginError");
-    errorMsg.innerText = msg;
-    errorMsg.classList.remove("hidden");
-}
-
-function resetDashboard() {
-    document.getElementById("loginCCCD").value = "";
-    document.getElementById("loginPass").value = "";
-}
-
-function logout() {
-    if(confirm("Bạn có chắc chắn muốn đăng xuất?")) {
-        auth.signOut();
-    }
-}
-// 5. Tải danh sách lớp (Render thẻ từ Database)
-function loadStudentList() {
-    const grid = document.getElementById("student-grid");
-    grid.innerHTML = '<p class="col-span-full text-center animate-pulse text-yellow-500">Đang truy xuất dữ liệu từ Database...</p>';
-
-    db.collection("students").get().then(snap => {
-        grid.innerHTML = "";
-        let list = [];
-        snap.forEach(doc => list.push(doc.data()));
-        
-        // Sắp xếp theo tên (lấy chữ cái cuối cùng)
-        list.sort((a,b) => {
-            const nameA = a.name.split(' ').pop();
-            const nameB = b.name.split(' ').pop();
-            return nameA.localeCompare(nameB, 'vi');
-        });
-
-        list.forEach(s => {
-            // Tạo card học sinh với hình ảnh từ field 'avatar' trong database
-            grid.innerHTML += `
-                <div class="glass-card p-4 rounded-2xl text-center group hover:border-yellow-500/50 transition-all duration-300 shadow-lg">
-                    <div class="relative w-20 h-20 mx-auto mb-3">
-                        <img src="${s.avatar || 'default-avatar.png'}" 
-                             class="w-20 h-20 rounded-full border-2 border-slate-700 group-hover:border-yellow-500 transition-all object-cover"
-                             onerror="this.src='default-avatar.png'">
-                    </div>
-                    <h4 class="text-[11px] md:text-xs font-bold text-white uppercase truncate px-1">${s.name}</h4>
-                    <p class="text-[9px] text-slate-500 mt-1 italic">${s.birthday || 'Chưa cập nhật'}</p>
-                </div>
-            `;
-        });
-    });
-}
-    function logout() { auth.signOut(); }
-</script>
-
-</body>
-</html>
-        body { font-family: 'Quicksand', sans-serif; background-color: #0f172a; color: #f8fafc; }
-        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .nav-active { color: #facc15; border-bottom: 2px solid #facc15; }
-        .animate-glow {
-            background: linear-gradient(90deg, #fbbf24, #f59e0b, #fbbf24);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shine 3s linear infinite;
-        }
-        @keyframes shine { to { background-position: 200% center; } }
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
-    </style>
-</head>
-<body class="min-h-screen">
-
-<header class="sticky top-0 z-50 glass-card border-b border-white/10 px-6 py-3">
-    <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <div class="flex items-center gap-4 cursor-pointer" onclick="showTab('home')">
-            <div class="w-12 h-12 bg-yellow-500 rounded-xl flex items-center justify-center text-slate-900 font-bold shadow-lg shadow-yellow-500/20 text-xl">A5</div>
-            <div>
-                <h2 class="text-white font-bold uppercase text-[10px] md:text-xs leading-tight tracking-wider opacity-80">Sở Giáo dục và Đào tạo tỉnh Tây Ninh</h2>
-                <h1 class="text-yellow-500 font-black uppercase text-sm md:text-lg tracking-tighter">Trường THPT Rạch Kiến - Lớp 12A5</h1>
-            </div>
-        </div>
-
-        <nav id="main-nav" class="flex items-center gap-4 md:gap-8 text-[10px] md:text-xs font-bold uppercase tracking-widest">
-            <button onclick="showTab('home')" class="tab-link nav-active flex items-center gap-1 transition hover:text-yellow-400">
-                <span>🏠</span> <span class="hidden sm:inline">Tin tức</span>
-            </button>
-            <button onclick="showTab('students')" class="tab-link flex items-center gap-1 transition hover:text-yellow-400">
-                <span>🎓</span> <span class="hidden sm:inline">Lớp học</span>
-            </button>
-            
-            <div id="user-info" class="hidden flex items-center gap-3 bg-white/5 pl-3 pr-1 py-1 rounded-full border border-white/10">
-                <span id="nav-user-name" class="text-white hidden md:block">...</span>
-                <div class="relative">
-                    <img id="nav-avatar" src="" class="w-8 h-8 rounded-full border-2 border-yellow-500 object-cover">
-                    <button onclick="logout()" class="absolute -top-1 -right-1 bg-red-500 text-white w-4 h-4 rounded-full text-[8px] flex items-center justify-center shadow-lg">✕</button>
-                </div>
-            </div>
-            
-            <button id="btnLoginOpen" onclick="document.getElementById('authModal').classList.remove('hidden')" 
-                    class="bg-yellow-500 text-slate-900 px-5 py-2 rounded-xl font-black hover:bg-yellow-400 transition transform active:scale-95 shadow-lg shadow-yellow-500/20">
-                ĐĂNG NHẬP
-            </button>
-        </nav>
-    </div>
-</header>
-
-<main class="max-w-7xl mx-auto p-6">
-    
-    <section id="tab-home" class="tab-content grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div class="lg:col-span-2 space-y-6">
-            <h2 class="text-2xl font-bold flex items-center gap-2">
-                <span class="w-2 h-8 bg-yellow-500 rounded-full"></span> 📣 Bảng tin 12A5
-            </h2>
-            
-            <div class="glass-card p-6 rounded-3xl space-y-4">
-                <div class="flex justify-between items-start">
-                    <span class="bg-blue-500/20 text-blue-400 text-[10px] px-3 py-1 rounded-full font-bold uppercase">Thông báo</span>
-                    <span class="text-slate-500 text-xs">20/02/2026</span>
-                </div>
-                <h3 class="text-xl font-bold text-yellow-500">Kế hoạch Hội Xuân 2026</h3>
-                <p class="text-slate-300 text-sm leading-relaxed">Chuẩn bị cho hội xuân sắp tới, lớp chúng mình sẽ triển khai gian hàng ẩm thực. Các thành viên tổ hậu cần tập trung lúc 15h tại phòng học để chốt menu nhé!</p>
-                <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800" class="w-full h-48 object-cover rounded-2xl opacity-80">
-            </div>
-        </div>
-
-        <div class="space-y-6">
-            <div id="welcome-box" class="glass-card p-8 rounded-3xl border-yellow-500/20 shadow-2xl">
-                <h2 class="text-3xl font-black mb-4 animate-glow uppercase">Chào mừng 12A5!</h2>
-                <p class="text-slate-400 text-sm leading-relaxed">Đăng nhập để xem thông tin cá nhân và cập nhật kết quả học tập của bạn.</p>
-            </div>
-
-            <div id="personal-profile" class="hidden glass-card p-6 rounded-3xl border-yellow-500/50 relative overflow-hidden">
-                <div class="absolute -top-4 -right-4 text-6xl opacity-10 rotate-12">🎓</div>
-                <div class="flex items-center gap-4 mb-6">
-                    <img id="my-avatar" src="" class="w-16 h-16 rounded-full border-2 border-yellow-500 shadow-xl object-cover">
-                    <div>
-                        <h3 id="my-name" class="font-bold text-lg text-white uppercase">...</h3>
-                        <p id="my-email" class="text-slate-500 text-xs">...</p>
-                    </div>
-                </div>
-                <div class="bg-slate-900/50 p-4 rounded-2xl italic text-slate-300 text-xs border-l-2 border-yellow-500">
-                    "<span id="my-quote">...</span>"
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="tab-students" class="tab-content hidden space-y-8">
-        <div class="text-center space-y-2">
-            <h2 class="text-3xl font-bold text-yellow-500 uppercase tracking-tighter">Đại gia đình 12A5</h2>
-            <p class="text-slate-400 text-sm">Tổng số: 45 thành viên ưu tú</p>
-        </div>
-        <div id="student-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-            </div>
-    </section>
-</main>
-
-<div id="authModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden z-[100] flex items-center justify-center p-4">
-    <div class="glass-card w-full max-w-sm rounded-3xl p-8 relative shadow-2xl border-white/20">
-        <button onclick="document.getElementById('authModal').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 hover:text-white">&times;</button>
-        <div class="text-center mb-8">
-            <div class="w-16 h-16 bg-yellow-500 rounded-2xl mx-auto flex items-center justify-center text-3xl mb-4 shadow-lg shadow-yellow-500/20">🔑</div>
-            <h3 class="text-xl font-bold">Xác thực thành viên</h3>
-        </div>
-        <div class="space-y-4">
-            <input id="loginEmail" type="text" placeholder="Số CCCD hoặc Email" class="w-full bg-slate-800 border border-slate-700 p-4 rounded-xl outline-none focus:border-yellow-500 transition-all">
-            <input id="loginPass" type="password" placeholder="Mật khẩu" class="w-full bg-slate-800 border border-slate-700 p-4 rounded-xl outline-none focus:border-yellow-500 transition-all">
-            <p id="loginError" class="text-red-400 text-xs text-center hidden"></p>
-            <button onclick="handleLogin()" class="w-full bg-yellow-500 text-slate-950 font-bold py-4 rounded-xl hover:bg-yellow-400 transition-transform active:scale-95 shadow-xl shadow-yellow-500/10">VÀO LỚP NGAY</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    // --- FIREBASE CONFIG ---
-    const firebaseConfig = { 
-        apiKey: "AIzaSyC8DW3w2ZbhZ8tnAA6ZJ-BQ69JMu0yVtzQ",
-        authDomain: "dsclass12a5.firebaseapp.com",
-        projectId: "dsclass12a5",
-        storageBucket: "dsclass12a5.firebasestorage.app",
-        messagingSenderId: "542384706583",
-        appId: "1:542384706583:web:10b1e914b5479cc93fb852"
-    }; 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-
-    // 1. Chuyển Tab
-    function showTab(tabName) {
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-        document.querySelectorAll('.tab-link').forEach(el => el.classList.remove('nav-active'));
-        
-        document.getElementById('tab-' + tabName).classList.remove('hidden');
-        event.currentTarget.classList.add('nav-active');
-
-        if(tabName === 'students') loadStudentList();
-    }
-
-    // 2. Auth Observer
+    // 2. Theo dõi trạng thái login
     auth.onAuthStateChanged((user) => {
         const btnLogin = document.getElementById("btnLoginOpen");
         const userInfo = document.getElementById("user-info");
@@ -473,79 +207,66 @@ function loadStudentList() {
         }
     });
 
-    // 3. Xử lý Đăng nhập
+    // 3. Đăng nhập (Dùng CCCD)
     async function handleLogin() {
         const input = document.getElementById("loginEmail").value.trim();
         const pass = document.getElementById("loginPass").value;
         const err = document.getElementById("loginError");
+        if(!input || !pass) return;
 
         let email = input.includes("@") ? input : input + "@a5.com";
-
         try {
             await auth.signInWithEmailAndPassword(email, pass);
             document.getElementById("authModal").classList.add("hidden");
+            location.reload(); // Reload để cập nhật data mượt hơn
         } catch (e) {
-            err.innerText = "Thông tin không chính xác!";
+            err.innerText = "CCCD hoặc Mật khẩu không đúng!";
             err.classList.remove("hidden");
         }
     }
 
-   // 4. Tải dữ liệu cá nhân (Cập nhật từ Database)
-function loadPersonalData(email) {
-    db.collection("students").where("email", "==", email).limit(1).get()
-    .then(snap => {
-        if(!snap.empty) {
-            const d = snap.docs[0].data();
-            // Cập nhật tên và ảnh trên Header
-            document.getElementById("nav-user-name").innerText = d.name;
-            document.getElementById("nav-avatar").src = d.avatar || 'default-avatar.png';
-            
-            // Cập nhật Dashboard cá nhân
-            document.getElementById("my-name").innerText = d.name;
-            document.getElementById("my-avatar").src = d.avatar || 'default-avatar.png';
-            document.getElementById("my-email").innerText = email;
-            document.getElementById("my-quote").innerText = d.description || "Thanh xuân tuyệt vời nhất là ở 12A5!";
-        }
-    })
-    .catch(err => console.error("Lỗi lấy dữ liệu cá nhân:", err));
-}
-
-// 5. Tải danh sách lớp (Render thẻ từ Database)
-function loadStudentList() {
-    const grid = document.getElementById("student-grid");
-    grid.innerHTML = '<p class="col-span-full text-center animate-pulse text-yellow-500">Đang truy xuất dữ liệu từ Database...</p>';
-
-    db.collection("students").get().then(snap => {
-        grid.innerHTML = "";
-        let list = [];
-        snap.forEach(doc => list.push(doc.data()));
-        
-        // Sắp xếp theo tên (lấy chữ cái cuối cùng)
-        list.sort((a,b) => {
-            const nameA = a.name.split(' ').pop();
-            const nameB = b.name.split(' ').pop();
-            return nameA.localeCompare(nameB, 'vi');
+    // 4. Load Data Cá nhân
+    function loadPersonalData(email) {
+        db.collection("students").where("email", "==", email).limit(1).get()
+        .then(snap => {
+            if(!snap.empty) {
+                const d = snap.docs[0].data();
+                document.getElementById("nav-user-name").innerText = d.name;
+                document.getElementById("nav-avatar").src = d.avatar || 'default-avatar.png';
+                document.getElementById("my-name").innerText = d.name;
+                document.getElementById("my-avatar").src = d.avatar || 'default-avatar.png';
+                document.getElementById("my-email").innerText = email.split('@')[0]; // Hiện CCCD thay vì mail
+                document.getElementById("my-quote").innerText = d.description || "Hãy nỗ lực hết mình vì mục tiêu đại học!";
+            }
         });
+    }
 
-        list.forEach(s => {
-            // Tạo card học sinh với hình ảnh từ field 'avatar' trong database
-            grid.innerHTML += `
-                <div class="glass-card p-4 rounded-2xl text-center group hover:border-yellow-500/50 transition-all duration-300 shadow-lg">
-                    <div class="relative w-20 h-20 mx-auto mb-3">
+    // 5. Load Danh sách lớp (Card thiết kế giống App)
+    function loadStudentList() {
+        const grid = document.getElementById("student-grid");
+        grid.innerHTML = '<p class="col-span-full text-center text-xs text-yellow-500 font-bold uppercase animate-pulse">Đang tải dữ liệu từ sở...</p>';
+        db.collection("students").get().then(snap => {
+            grid.innerHTML = "";
+            let list = [];
+            snap.forEach(doc => list.push(doc.data()));
+            list.sort((a,b) => a.name.split(' ').pop().localeCompare(b.name.split(' ').pop(), 'vi'));
+
+            list.forEach(s => {
+                grid.innerHTML += `
+                    <div class="glass-card student-card p-5 rounded-[2rem] text-center border border-white/5 transition-all duration-300">
                         <img src="${s.avatar || 'default-avatar.png'}" 
-                             class="w-20 h-20 rounded-full border-2 border-slate-700 group-hover:border-yellow-500 transition-all object-cover"
+                             class="w-20 h-20 rounded-full mx-auto mb-4 border-2 border-yellow-500/50 p-1 object-cover shadow-lg"
                              onerror="this.src='default-avatar.png'">
+                        <h4 class="text-[11px] font-black text-white uppercase truncate">${s.name}</h4>
+                        <p class="text-[9px] text-slate-500 mt-2 font-bold bg-white/5 py-1 rounded-full italic tracking-tighter">${s.birthday || '12A5 MEMBER'}</p>
                     </div>
-                    <h4 class="text-[11px] md:text-xs font-bold text-white uppercase truncate px-1">${s.name}</h4>
-                    <p class="text-[9px] text-slate-500 mt-1 italic">${s.birthday || 'Chưa cập nhật'}</p>
-                </div>
-            `;
+                `;
+            });
         });
-    });
-}
-    function logout() { auth.signOut(); }
+    }
+
+    function logout() { if(confirm("Đăng xuất khỏi hệ thống?")) auth.signOut(); }
 </script>
 
 </body>
 </html>
-
