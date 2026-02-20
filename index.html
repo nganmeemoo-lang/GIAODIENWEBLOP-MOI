@@ -162,6 +162,72 @@
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="gallery-grid">
         </div>
 </section>
+    <section id="section-gallery" class="hidden">
+  <h2 class="text-2xl font-bold mb-10 text-yellow-500 border-b border-yellow-500/30 pb-2">
+    📸 Hành Trình 3 Năm Thanh Xuân
+  </h2>
+
+  <div class="relative border-l-4 border-yellow-600/50 ml-4 space-y-16">
+
+    <!-- LỚP 10 -->
+    <div class="relative pl-10">
+      <div class="absolute -left-[14px] top-2 w-6 h-6 bg-yellow-500 rounded-full border-4 border-zinc-900"></div>
+      <h3 class="text-xl font-bold text-yellow-400 mb-4">📚 Năm Lớp 10 - Khởi Đầu</h3>
+      <img src="class10.jpg"
+           onclick="openModal(this.src)"
+           class="rounded-2xl shadow-2xl border-4 border-red-800 w-full max-w-3xl h-64 object-cover cursor-zoom-in hover:scale-105 transition duration-300">
+    </div>
+
+    <!-- LỚP 11 -->
+    <div class="relative pl-10">
+      <div class="absolute -left-[14px] top-2 w-6 h-6 bg-yellow-500 rounded-full border-4 border-zinc-900"></div>
+      <h3 class="text-xl font-bold text-yellow-400 mb-4">📖 Năm Lớp 11 - Trưởng Thành</h3>
+      <img src="class11.jpg"
+           onclick="openModal(this.src)"
+           class="rounded-2xl shadow-2xl border-4 border-red-800 w-full max-w-3xl h-64 object-cover cursor-zoom-in hover:scale-105 transition duration-300">
+    </div>
+
+    <!-- LỚP 12 -->
+    <div class="relative pl-10">
+      <div class="absolute -left-[14px] top-2 w-6 h-6 bg-yellow-500 rounded-full border-4 border-zinc-900"></div>
+      <h3 class="text-xl font-bold text-yellow-400 mb-4">🎓 Năm Lớp 12 - Bứt Phá</h3>
+      <img src="class12.jpg"
+           onclick="openModal(this.src)"
+           class="rounded-2xl shadow-2xl border-4 border-red-800 w-full max-w-3xl h-64 object-cover cursor-zoom-in hover:scale-105 transition duration-300">
+    </div>
+
+  </div>
+</section>
+
+
+<section id="tab-events" class="hidden animate-fade-in">
+  <h2 class="text-3xl font-black uppercase text-slate-800 tracking-tighter border-b-2 border-blue-600 pb-2 mb-8">
+    📅 Sự kiện nổi bật
+  </h2>
+
+  <div class="bg-blue-50 p-8 rounded-[2rem] border border-blue-100 max-w-3xl mx-auto shadow-sm">
+    <h3 class="text-3xl font-black text-blue-700 text-center uppercase tracking-tight">
+      Hội Xuân 2026
+    </h3>
+    <p class="text-slate-600 mt-3 text-center font-medium text-lg">
+      Menu hội xuân của lớp 12A5 chúng mình nè. Các bạn xem để chuẩn bị nguyên liệu nhé!
+    </p>
+  </div>
+
+  <div class="mt-10 flex justify-center">
+    <div class="relative group">
+      <img 
+        src="menu.jpg" 
+        alt="Menu Hội Xuân 2026"
+        class="w-full max-w-2xl rounded-[2rem] shadow-2xl border-8 border-white hover:scale-[1.02] transition-all duration-500"
+        onerror="this.src='https://via.placeholder.com/800x1000?text=HÌNH+ẢNH+MENU'"
+      >
+      <div class="absolute -bottom-4 -right-4 bg-yellow-400 text-slate-900 font-black px-6 py-2 rounded-xl shadow-lg transform rotate-3">
+        HOT MENU 🔥
+      </div>
+    </div>
+  </div>
+</section>
 </main>
 
 <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-[100] flex items-center justify-center p-6">
@@ -352,6 +418,7 @@ function filterEvents(type) {
 </script>
 </body>
 </html>
+
 
 
 
