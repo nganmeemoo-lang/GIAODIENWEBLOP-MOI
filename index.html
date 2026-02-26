@@ -17,36 +17,49 @@
         .tab-content { animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Hiệu ứng Top-up Card */
         .card-pop { animation: cardBounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes cardBounce { from { opacity: 0; transform: scale(0.8) translateY(50px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         
-        .student-avatar { cursor: pointer; transition: 0.3s ease; border: 3px solid white; }
-        .student-avatar:hover { transform: scale(1.1); border-color: #2563eb; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2); }
+        .student-avatar { cursor: pointer; transition: 0.3s ease; border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .student-avatar:hover { transform: scale(1.05); border-color: #2563eb; }
+        
+        /* Nút Facebook nhỏ trên Avatar */
+        .fb-mini-link { 
+            position: absolute; 
+            bottom: 15px; 
+            right: 0px; 
+            background: #1877F2; 
+            color: white; 
+            width: 28px; 
+            height: 28px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            border: 2px solid white;
+            transition: 0.2s;
+            z-index: 10;
+        }
+        .fb-mini-link:hover { transform: scale(1.2); shadow: 0 0 10px #1877F2; }
     </style>
 </head>
 <body class="min-h-screen">
 
-<header class="sticky top-0 z-[100] bg-white/90 backdrop-blur-md shadow-sm px-4 md:px-8 py-3">
+<header class="sticky top-0 z-[100] bg-white/90 backdrop-blur-md shadow-sm px-4 md:px-8 py-2">
     <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <div class="flex items-center gap-2 cursor-pointer" onclick="showTab('home')">
-            <div class="w-10 h-10 bg-blue-600 rounded-2xl flex items-center justify-center text-white font-black shadow-lg shadow-blue-200">A5</div>
-            <div class="hidden md:block leading-none">
-                <h1 class="text-slate-800 font-black uppercase text-sm">12A5 Rạch Kiến</h1>
-                <span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Niên khóa 2023-2026</span>
-            </div>
+        <div class="flex items-center cursor-pointer" onclick="showTab('home')">
+            <img src="logo.png" alt="Logo 12A5" class="h-12 w-auto object-contain">
         </div>
         
-        <nav class="flex items-center gap-4 md:gap-6 text-[11px] font-black uppercase tracking-tighter">
-            <button onclick="showTab('home')" class="tab-link nav-active py-2">Tin tức</button>
-            <button onclick="showTab('students')" class="tab-link py-2">Lớp học</button>
-            <button onclick="showTab('events')" class="tab-link py-2">Sự kiện</button>
-            <button onclick="showTab('gallery')" class="tab-link py-2">Ảnh lớp</button>
+        <nav class="flex items-center gap-6 text-[11px] font-black uppercase tracking-tighter">
+            <button onclick="showTab('home')" class="tab-link nav-active py-2">Trang chủ</button>
+            <button onclick="showTab('students')" class="tab-link py-2">Thành viên</button>
+            <button onclick="showTab('gallery')" class="tab-link py-2">Kỷ niệm</button>
             <div id="user-area" class="border-l pl-4 ml-2">
                 <button id="btnLoginOpen" onclick="document.getElementById('authModal').classList.remove('hidden')" class="bg-slate-900 text-white px-4 py-2 rounded-xl hover:bg-blue-600 transition">LOGIN</button>
                 <div id="user-info" class="hidden flex items-center gap-2">
                     <img id="nav-avatar" class="w-8 h-8 rounded-full border border-blue-500 object-cover">
-                    <button onclick="logout()" class="text-red-500 hover:underline">OUT</button>
+                    <button onclick="logout()" class="text-red-500 font-bold">OUT</button>
                 </div>
             </div>
         </nav>
@@ -54,87 +67,54 @@
 </header>
 
 <main class="max-w-7xl mx-auto p-4 md:p-8">
-    <section id="tab-home" class="tab-content space-y-6">
-        <div class="bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-200 relative overflow-hidden">
-            <div class="relative z-10">
-                <h2 class="text-4xl font-black text-slate-800 mb-2 uppercase tracking-tighter">Bảng tin 12A5</h2>
-                <p class="text-slate-500 font-medium">Cập nhật những hoạt động mới nhất của tập thể lớp.</p>
-            </div>
-            <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-blue-50 rounded-full blur-3xl opacity-50"></div>
+    <section id="tab-home" class="tab-content">
+        <div class="bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-200">
+            <h2 class="text-4xl font-black text-slate-800 mb-2 uppercase tracking-tighter italic">Bảng tin <span class="text-blue-600">12A5</span></h2>
+            <p class="text-slate-500 font-medium italic">Danh sách thành viên chính thức niên khóa 2023-2026.</p>
         </div>
     </section>
 
     <section id="tab-students" class="tab-content hidden">
-        <div class="flex justify-between items-end mb-8">
+        <div class="text-center mb-10">
             <h2 class="text-3xl font-black text-slate-800 uppercase tracking-tighter italic">Thành viên <span class="text-blue-600">Lớp học</span></h2>
         </div>
-        <div id="student-grid" class="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-6 md:gap-10">
+        <div id="student-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8">
             </div>
-    </section>
-
-    <section id="tab-events" class="tab-content hidden space-y-6">
-        <h2 class="text-3xl font-black text-slate-800 uppercase italic">📅 Sự kiện & <span class="text-blue-600">Hoạt động</span></h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100">
-                <div class="h-40 bg-blue-100 rounded-2xl mb-4 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800" class="w-full h-full object-cover">
-                </div>
-                <h3 class="font-black text-lg uppercase">Hội Xuân Rạch Kiến 2026</h3>
-                <p class="text-slate-500 text-sm mt-2">Cùng tham gia gian hàng của lớp 12A5 với nhiều món ăn hấp dẫn.</p>
-            </div>
-        </div>
     </section>
 
     <section id="tab-gallery" class="tab-content hidden">
-        <h2 class="text-3xl font-black text-slate-800 uppercase italic mb-8">📸 Kho ảnh <span class="text-blue-600">Kỷ niệm</span></h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <img src="https://via.placeholder.com/400x400?text=Memories+1" class="rounded-3xl hover:opacity-80 cursor-pointer transition">
-            <img src="https://via.placeholder.com/400x400?text=Memories+2" class="rounded-3xl hover:opacity-80 cursor-pointer transition">
-            <img src="https://via.placeholder.com/400x400?text=Memories+3" class="rounded-3xl hover:opacity-80 cursor-pointer transition">
-            <img src="https://via.placeholder.com/400x400?text=Memories+4" class="rounded-3xl hover:opacity-80 cursor-pointer transition">
-        </div>
+        <h2 class="text-3xl font-black text-slate-800 uppercase italic mb-8 italic">📸 Kho ảnh kỷ niệm</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="gallery-container"></div>
     </section>
 </main>
 
-<div id="profileModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md hidden z-[200] flex items-center justify-center p-6" onclick="closeProfile()">
+<div id="profileModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md hidden z-[200] flex items-center justify-center p-6" onclick="closeProfile()">
     <div class="card-pop bg-white w-full max-w-[360px] rounded-[3rem] overflow-hidden shadow-2xl relative border border-white" onclick="event.stopPropagation()">
-        <div class="h-28 bg-gradient-to-r from-blue-600 to-indigo-600 relative">
-            <button class="absolute top-5 right-5 w-8 h-8 bg-black/20 text-white rounded-full flex items-center justify-center hover:bg-black/40 transition" onclick="closeProfile()">&times;</button>
-        </div>
-        
+        <div class="h-28 bg-gradient-to-r from-blue-600 to-indigo-600"></div>
         <div class="px-8 pb-10 text-center -mt-14">
-            <div class="inline-block relative">
-                <img id="pop-avatar" src="" class="w-28 h-28 rounded-full border-[6px] border-white shadow-xl object-cover bg-white">
-                <div class="absolute bottom-1 right-1 w-6 h-6 bg-green-500 border-4 border-white rounded-full"></div>
-            </div>
-
+            <img id="pop-avatar" src="" class="w-28 h-28 rounded-full border-[6px] border-white shadow-xl object-cover bg-white mx-auto">
             <h3 id="pop-name" class="mt-4 text-2xl font-black text-slate-800 uppercase tracking-tighter">...</h3>
-            <div class="inline-block px-4 py-1 bg-blue-50 text-blue-600 rounded-full text-[10px] font-black uppercase tracking-widest mt-2 mb-6">
-                📅 <span id="pop-birthday">...</span>
+            <div class="bg-slate-50 p-5 rounded-[2rem] border border-slate-100 mt-6 text-left">
+                <p class="text-[9px] text-slate-400 font-black uppercase mb-2 tracking-widest italic ml-2">Thông tin</p>
+                <p id="pop-desc" class="text-slate-600 italic text-sm leading-relaxed font-medium px-2">...</p>
             </div>
-
-            <div class="bg-slate-50 p-5 rounded-[2rem] border border-slate-100">
-                <p class="text-[9px] text-slate-400 font-black uppercase mb-2 tracking-widest text-left ml-2 italic">About me</p>
-                <p id="pop-desc" class="text-slate-600 italic text-sm leading-relaxed text-left px-2 font-medium">...</p>
-            </div>
+            <button onclick="closeProfile()" class="mt-6 w-full py-3 bg-slate-100 rounded-2xl text-slate-400 font-bold hover:bg-slate-200 transition">Đóng</button>
         </div>
     </div>
 </div>
 
 <div id="authModal" class="fixed inset-0 bg-slate-900/40 hidden z-[200] flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-sm rounded-[2.5rem] p-8 shadow-2xl">
-        <h3 class="text-2xl font-black text-slate-800 uppercase mb-6 tracking-tight text-center italic">Xác thực <span class="text-blue-600">A5</span></h3>
+    <div class="bg-white w-full max-w-sm rounded-[2.5rem] p-8 shadow-2xl text-center">
+        <h3 class="text-2xl font-black text-slate-800 uppercase mb-6 italic">Xác nhận <span class="text-blue-600">12A5</span></h3>
         <div class="space-y-4">
-            <input id="loginEmail" type="text" placeholder="Số CCCD (Ví dụ: 072...)" class="w-full bg-slate-100 border-none p-4 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold">
-            <input id="loginPass" type="password" placeholder="Mật khẩu" class="w-full bg-slate-100 border-none p-4 rounded-2xl outline-none focus:ring-2 ring-blue-500">
-            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white font-black py-4 rounded-2xl shadow-lg shadow-blue-200 uppercase tracking-widest">Đăng nhập ngay</button>
-            <button onclick="document.getElementById('authModal').classList.add('hidden')" class="w-full text-slate-400 text-[10px] font-black uppercase mt-2">Bỏ qua</button>
+            <input id="loginEmail" type="text" placeholder="Số CCCD" class="w-full bg-slate-100 border-none p-4 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold text-center">
+            <input id="loginPass" type="password" placeholder="Mật khẩu" class="w-full bg-slate-100 border-none p-4 rounded-2xl outline-none focus:ring-2 ring-blue-500 text-center">
+            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white font-black py-4 rounded-2xl shadow-lg uppercase tracking-widest hover:bg-blue-700 transition">Đăng nhập</button>
         </div>
     </div>
 </div>
 
 <script>
-    // --- FIREBASE CONFIG ---
     const firebaseConfig = { 
         apiKey: "AIzaSyC8DW3w2ZbhZ8tnAA6ZJ-BQ69JMu0yVtzQ",
         authDomain: "dsclass12a5.firebaseapp.com",
@@ -147,7 +127,6 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // --- TAB SYSTEM ---
     function showTab(name) {
         document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
         document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('nav-active'));
@@ -156,16 +135,14 @@
         if(name === 'students') loadStudents();
     }
 
-    // --- AUTH LOGIC ---
     async function handleLogin() {
         const input = document.getElementById("loginEmail").value.trim();
         const pass = document.getElementById("loginPass").value;
         let email = input.includes("@") ? input : input + "@a5.com";
         try {
             await auth.signInWithEmailAndPassword(email, pass);
-            document.getElementById("authModal").classList.add("hidden");
             location.reload();
-        } catch (e) { alert("Thông tin đăng nhập không chính xác!"); }
+        } catch (e) { alert("Sai thông tin!"); }
     }
 
     function logout() { auth.signOut().then(() => location.reload()); }
@@ -184,10 +161,9 @@
         }
     });
 
-    // --- DANH SÁCH LỚP (SẮP XẾP ALPHA B & TOP-UP) ---
     function loadStudents() {
         const grid = document.getElementById("student-grid");
-        grid.innerHTML = '<p class="col-span-full text-center py-20 text-slate-400 font-black animate-pulse uppercase tracking-widest text-xs">Đang tải thành viên...</p>';
+        grid.innerHTML = '<p class="col-span-full text-center py-20 text-slate-400 font-black animate-pulse uppercase text-xs">Đang tải dữ liệu...</p>';
         
         db.collection("students").get().then(snap => {
             grid.innerHTML = "";
@@ -197,7 +173,6 @@
                 if(d.name) list.push(d);
             });
 
-            // Sắp xếp theo tên cuối (Alpha B)
             list.sort((a, b) => {
                 let nameA = a.name.trim().split(" ").pop();
                 let nameB = b.name.trim().split(" ").pop();
@@ -206,21 +181,31 @@
 
             list.forEach(s => {
                 const avatar = s.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(s.name)}&background=random&color=fff`;
+                const desc = s.description || "Thành viên tập thể 12A5.";
+                const fbLink = s.facebook || "#";
+                
+                // Nút Facebook chỉ hiện nếu có link trong DB
+                const fbButton = s.facebook ? `
+                    <a href="${fbLink}" target="_blank" class="fb-mini-link" title="Facebook của ${s.name}">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg>
+                    </a>` : "";
+
                 grid.innerHTML += `
-                    <div class="text-center group">
-                        <img src="${avatar}" 
-                             onclick="openProfile('${s.name}', '${s.birthday || 'Bí mật'}', '${s.description || 'Thành viên xuất sắc của 12A5'}', '${avatar}')"
-                             class="student-avatar w-20 h-20 md:w-28 md:h-28 rounded-[2rem] mx-auto object-cover shadow-sm bg-white mb-3">
-                        <p class="font-black text-[10px] md:text-xs uppercase text-slate-700 tracking-tighter leading-tight group-hover:text-blue-600 transition">${s.name}</p>
+                    <div class="text-center group relative">
+                        <div class="relative inline-block">
+                            <img src="${avatar}" 
+                                 onclick="openProfile('${s.name}', '${desc}', '${avatar}')"
+                                 class="student-avatar w-24 h-24 md:w-32 md:h-32 rounded-[2.5rem] object-cover bg-white">
+                            ${fbButton}
+                        </div>
+                        <p class="mt-3 font-black text-[10px] md:text-xs uppercase text-slate-700 tracking-tighter italic group-hover:text-blue-600 transition">${s.name}</p>
                     </div>`;
             });
         });
     }
 
-    // --- TOP-UP CARD FUNCTIONS ---
-    function openProfile(name, bday, desc, img) {
+    function openProfile(name, desc, img) {
         document.getElementById("pop-name").innerText = name;
-        document.getElementById("pop-birthday").innerText = bday;
         document.getElementById("pop-desc").innerText = desc;
         document.getElementById("pop-avatar").src = img;
         document.getElementById("profileModal").classList.remove("hidden");
