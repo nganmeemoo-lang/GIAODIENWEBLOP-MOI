@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
@@ -42,7 +43,6 @@
             background: rgba(251, 191, 36, 0.1);
             border-color: #fbbf24;
         }
-        section { transition: opacity 0.5s ease; }
     </style>
 </head>
 <body>
@@ -51,9 +51,9 @@
     <div class="max-w-7xl mx-auto flex justify-between items-center">
         <div class="flex items-center gap-3 cursor-pointer" onclick="showSection('home')">
             <div class="bg-yellow-500 text-black p-2 rounded-lg font-black italic">12A5</div>
-            <span class="font-extrabold text-xl tracking-tighter uppercase hidden md:block">Rạch Kiến</span>
+            <span class="font-extrabold text-xl tracking-tighter uppercase hidden md:block text-white">Rạch Kiến</span>
         </div>
-        <div class="flex gap-8 font-semibold text-sm uppercase tracking-widest">
+        <div class="flex gap-8 font-semibold text-sm uppercase tracking-widest text-gray-300">
             <button onclick="showSection('home')" class="hover:text-yellow-400 transition">Trang chủ</button>
             <button onclick="showSection('students')" class="hover:text-yellow-400 transition">Thành viên</button>
             <button onclick="showSection('gallery')" class="hover:text-yellow-400 transition">Kỷ niệm</button>
@@ -63,8 +63,8 @@
 
 <section id="section-home" class="py-20 px-6">
     <div class="max-w-4xl mx-auto text-center">
-        <div class="inline-block px-4 py-1 rounded-full bg-yellow-500/10 text-yellow-500 text-xs font-bold mb-6">
-            CHẶNG ĐƯỜNG CUỐI CÙNG 2023 - 2026
+        <div class="inline-block px-4 py-1 rounded-full bg-yellow-500/10 text-yellow-500 text-xs font-bold mb-6 uppercase">
+            Chặng đường cuối 2023 - 2026
         </div>
         <h1 class="text-5xl md:text-7xl font-black mb-8 leading-tight">
             Vượt Vũ Môn <br><span class="text-gradient">THPT Quốc Gia 2026</span>
@@ -88,7 +88,6 @@
                 <div class="text-[10px] uppercase mt-2 text-gray-400 font-bold">Giây</div>
             </div>
         </div>
-
         <p class="text-gray-400 max-w-lg mx-auto italic border-l-2 border-yellow-500 pl-4">
             "Áp lực tạo nên kim cương. Đừng dừng lại khi mệt mỏi, hãy dừng lại khi đã hoàn thành."
         </p>
@@ -96,57 +95,54 @@
 </section>
 
 <section id="section-students" class="hidden py-16 px-6 max-w-7xl mx-auto">
-    <div class="flex justify-between items-end mb-12">
-        <div>
-            <h2 class="text-3xl font-black text-yellow-400">Gia Đình 12A5</h2>
-            <p class="text-gray-400">Những người bạn đồng hành suốt thanh xuân</p>
-        </div>
+    <div class="mb-12">
+        <h2 class="text-3xl font-black text-yellow-400">Gia Đình 12A5</h2>
+        <p class="text-gray-400 italic">Những người bạn đồng hành suốt thanh xuân</p>
     </div>
-    
     <div id="studentList" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
         </div>
 </section>
 
 <section id="section-gallery" class="hidden py-16 px-6 max-w-7xl mx-auto">
-    <h2 class="text-3xl font-black text-yellow-400 mb-10 text-center">Cuốn Album Thời Gian</h2>
+    <h2 class="text-3xl font-black text-yellow-400 mb-10 text-center uppercase">Cuốn Album Thời Gian</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="space-y-4">
-            <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1000" class="rounded-2xl hover:opacity-80 transition cursor-pointer">
-            <img src="https://images.unsplash.com/photo-1541339907198-e08756defefe?q=80&w=1000" class="rounded-2xl hover:opacity-80 transition cursor-pointer">
+            <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=600" class="rounded-2xl hover:opacity-80 transition cursor-pointer w-full">
+            <img src="https://images.unsplash.com/photo-1541339907198-e08756defefe?auto=format&fit=crop&w=600" class="rounded-2xl hover:opacity-80 transition cursor-pointer w-full">
         </div>
-        <div class="space-y-4 pt-8">
-            <img src="https://images.unsplash.com/photo-1523240715639-9978131b734d?q=80&w=1000" class="rounded-2xl hover:opacity-80 transition cursor-pointer">
-            <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?q=80&w=1000" class="rounded-2xl hover:opacity-80 transition cursor-pointer">
+        <div class="space-y-4 md:mt-8">
+            <img src="https://images.unsplash.com/photo-1523240715639-9978131b734d?auto=format&fit=crop&w=600" class="rounded-2xl hover:opacity-80 transition cursor-pointer w-full">
+            <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=600" class="rounded-2xl hover:opacity-80 transition cursor-pointer w-full">
         </div>
         <div class="space-y-4">
-            <img src="https://images.unsplash.com/photo-1525921429624-479b6a26d84d?q=80&w=1000" class="rounded-2xl hover:opacity-80 transition cursor-pointer">
+            <img src="https://images.unsplash.com/photo-1525921429624-479b6a26d84d?auto=format&fit=crop&w=600" class="rounded-2xl hover:opacity-80 transition cursor-pointer w-full">
         </div>
     </div>
 </section>
 
-<footer class="mt-20 py-10 border-t border-white/5 text-center text-gray-500 text-sm">
-    <p>© 2026 Tập thể lớp 12A5 - THPT Rạch Kiến</p>
-    <p class="mt-2 text-yellow-500/50">Designed for Future Legends</p>
-</footer>
-
 <div id="studentModal" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-[100] p-4 backdrop-blur-md">
-    <div class="glass max-w-sm w-full p-8 rounded-3xl text-center relative">
-        <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+    <div class="glass max-w-sm w-full p-8 rounded-3xl text-center relative border border-yellow-500/30">
+        <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
+            <i class="fas fa-times"></i>
+        </button>
         <div class="relative inline-block mb-6">
-            <img id="modalAvatar" class="w-32 h-32 rounded-2xl object-cover border-2 border-yellow-500 rotate-3">
+            <img id="modalAvatar" src="" class="w-32 h-32 rounded-2xl object-cover border-2 border-yellow-500 shadow-2xl">
         </div>
-        <h3 id="modalName" class="text-2xl font-black text-yellow-400 mb-2 uppercase tracking-tighter"></h3>
+        <h3 id="modalName" class="text-2xl font-black text-yellow-400 mb-2 uppercase"></h3>
         <div class="h-[2px] w-12 bg-yellow-500 mx-auto mb-4"></div>
-        <p id="modalDesc" class="text-gray-300 leading-relaxed italic"></p>
-        <div class="mt-8 flex justify-center gap-4">
-             <i class="fab fa-facebook text-blue-400 text-xl"></i>
-             <i class="fab fa-instagram text-pink-400 text-xl"></i>
-        </div>
+        <p id="modalDesc" class="text-gray-300 italic mb-6"></p>
+        
+        <div id="socialBox" class="flex justify-center gap-4">
+            </div>
     </div>
 </div>
 
+<footer class="mt-20 py-10 border-t border-white/5 text-center text-gray-500 text-sm">
+    <p>© 2026 Tập thể lớp 12A5 - THPT Rạch Kiến</p>
+</footer>
+
 <script>
-    /* --- CONFIG FIREBASE (Giữ nguyên từ file cũ) --- */
+    // 1. Firebase Config
     const firebaseConfig = {
         apiKey: "AIzaSyC8DW3w2ZbhZ8tnAA6ZJ-BQ69JMu0yVtzQ",
         authDomain: "dsclass12a5.firebaseapp.com",
@@ -158,7 +154,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    /* --- COUNTDOWN LOGIC --- */
+    // 2. Countdown Logic
     function updateCountdown() {
         const examDate = new Date("June 11, 2026 00:00:00").getTime();
         const now = new Date().getTime();
@@ -169,14 +165,15 @@
         const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const s = Math.floor((diff % (1000 * 60)) / 1000);
 
-        document.getElementById("days").innerText = d < 10 ? '0' + d : d;
-        document.getElementById("hours").innerText = h < 10 ? '0' + h : h;
-        document.getElementById("mins").innerText = m < 10 ? '0' + m : m;
-        document.getElementById("secs").innerText = s < 10 ? '0' + s : s;
+        document.getElementById("days").innerText = d < 10 ? '0'+d : d;
+        document.getElementById("hours").innerText = h < 10 ? '0'+h : h;
+        document.getElementById("mins").innerText = m < 10 ? '0'+m : m;
+        document.getElementById("secs").innerText = s < 10 ? '0'+s : s;
     }
     setInterval(updateCountdown, 1000);
+    updateCountdown();
 
-    /* --- NAVIGATION --- */
+    // 3. Navigation
     function showSection(name) {
         document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
         document.getElementById('section-' + name).classList.remove('hidden');
@@ -184,54 +181,52 @@
         window.scrollTo(0,0);
     }
 
-    /* --- LOAD DATA --- */
+    // 4. Load Data
     function loadStudents() {
         const container = document.getElementById("studentList");
-        container.innerHTML = `<div class="col-span-full text-center py-10">Đang gọi tên các chiến binh...</div>`;
+        container.innerHTML = `<div class="col-span-full text-center py-10 text-yellow-500">Đang tải danh sách...</div>`;
 
         db.collection("students").get().then((querySnapshot) => {
             container.innerHTML = "";
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
                 const card = document.createElement("div");
-                card.className = "student-card glass p-5 rounded-2xl text-center border border-white/5 cursor-pointer";
+                card.className = "student-card glass p-4 rounded-2xl text-center border border-white/5 cursor-pointer shadow-lg";
                 card.innerHTML = `
-                    <img src="${data.avatar || 'https://via.placeholder.com/150'}" class="w-full aspect-square object-cover rounded-xl mb-4 shadow-lg">
-                    <h4 class="font-bold text-yellow-400 uppercase text-sm tracking-tight">${data.name}</h4>
-                    <p class="text-[10px] text-gray-500 mt-1 uppercase">Học sinh lớp 12A5</p>
+                    <img src="${data.avatar || 'https://via.placeholder.com/150'}" class="w-full aspect-square object-cover rounded-xl mb-4 border border-white/10">
+                    <h4 class="font-bold text-yellow-400 text-sm uppercase">${data.name}</h4>
+                    <p class="text-[10px] text-gray-500 mt-1 uppercase">Học sinh 12A5</p>
                 `;
                 card.onclick = () => openModal(data);
                 container.appendChild(card);
             });
         }).catch(err => {
-            container.innerHTML = "Lỗi tải dữ liệu. Hãy kiểm tra kết nối!";
+            console.error(err);
+            container.innerHTML = "Không thể tải dữ liệu.";
         });
     }
 
-    /* ===== CẬP NHẬT MODAL HỌC SINH ===== */
-function openModal(student) {
-    document.getElementById("modalAvatar").src = student.avatar || 'https://via.placeholder.com/150';
-    document.getElementById("modalName").innerText = student.name;
-    document.getElementById("modalDesc").innerText = student.description || "Thành viên lớp 12A5";
+    // 5. Modal & Facebook Link
+    function openModal(student) {
+        document.getElementById("modalAvatar").src = student.avatar || 'https://via.placeholder.com/150';
+        document.getElementById("modalName").innerText = student.name;
+        document.getElementById("modalDesc").innerText = student.description || "Thành viên lớp 12A5 - THPT Rạch Kiến";
 
-    // Tìm vùng chứa icon mạng xã hội trong Modal
-    const socialContainer = document.querySelector("#studentModal .flex.justify-center");
-    
-    // Xóa nội dung cũ và tạo nút mới dựa trên link Facebook
-    if (student.facebook) {
-        socialContainer.innerHTML = `
-            <a href="${student.facebook}" target="_blank" class="hover:scale-125 transition-transform duration-300">
-                <i class="fab fa-facebook text-blue-500 text-3xl"></i>
-            </a>
-        `;
-    } else {
-        socialContainer.innerHTML = `<span class="text-gray-500 text-xs italic">Chưa cập nhật mạng xã hội</span>`;
-    }
+        const socialBox = document.getElementById("socialBox");
+        
+        if (student.facebook) {
+            socialBox.innerHTML = `
+                <a href="${student.facebook}" target="_blank" class="transform hover:scale-110 transition">
+                    <i class="fab fa-facebook text-blue-500 text-4xl"></i>
+                </a>
+            `;
+        } else {
+            socialBox.innerHTML = `<span class="text-gray-500 text-xs italic">Chưa có Facebook</span>`;
+        }
 
-    const modal = document.getElementById("studentModal");
-    modal.classList.remove("hidden");
-    modal.classList.add("flex");
-}
+        const modal = document.getElementById("studentModal");
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
     }
 
     function closeModal() {
