@@ -1,316 +1,245 @@
-```html
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
-<meta charset="UTF-8">
-<title>Lớp 12A5 - Countdown THPTQG</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12A5 - Chiến Binh Rạch Kiến 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;900&display=swap" rel="stylesheet">
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-<style>
-
-body{
-font-family:'Quicksand',sans-serif;
-background:#0f172a;
-color:white;
-}
-
-.nav-btn{
-font-weight:800;
-font-size:13px;
-letter-spacing:1px;
-}
-
-.countbox{
-font-size:56px;
-font-weight:900;
-letter-spacing:2px;
-}
-
-.student-card:hover{
-transform:scale(1.05);
-}
-
-</style>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at top right, #1e293b, #0f172a);
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .text-gradient {
+            background: linear-gradient(to right, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .count-unit {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 1rem;
+            min-width: 80px;
+            border-bottom: 3px solid #fbbf24;
+        }
+        .student-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .student-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            background: rgba(251, 191, 36, 0.1);
+            border-color: #fbbf24;
+        }
+        section { transition: opacity 0.5s ease; }
+    </style>
 </head>
-
-
 <body>
 
-<!-- HEADER -->
+<nav class="sticky top-0 z-50 glass border-b border-white/10 px-6 py-4">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="showSection('home')">
+            <div class="bg-yellow-500 text-black p-2 rounded-lg font-black italic">12A5</div>
+            <span class="font-extrabold text-xl tracking-tighter uppercase hidden md:block">Rạch Kiến</span>
+        </div>
+        <div class="flex gap-8 font-semibold text-sm uppercase tracking-widest">
+            <button onclick="showSection('home')" class="hover:text-yellow-400 transition">Trang chủ</button>
+            <button onclick="showSection('students')" class="hover:text-yellow-400 transition">Thành viên</button>
+            <button onclick="showSection('gallery')" class="hover:text-yellow-400 transition">Kỷ niệm</button>
+        </div>
+    </div>
+</nav>
 
-<header class="bg-black border-b border-yellow-500 p-4 sticky top-0 z-50">
+<section id="section-home" class="py-20 px-6">
+    <div class="max-w-4xl mx-auto text-center">
+        <div class="inline-block px-4 py-1 rounded-full bg-yellow-500/10 text-yellow-500 text-xs font-bold mb-6">
+            CHẶNG ĐƯỜNG CUỐI CÙNG 2023 - 2026
+        </div>
+        <h1 class="text-5xl md:text-7xl font-black mb-8 leading-tight">
+            Vượt Vũ Môn <br><span class="text-gradient">THPT Quốc Gia 2026</span>
+        </h1>
 
-<div class="max-w-6xl mx-auto flex justify-between items-center">
+        <div class="flex justify-center gap-4 md:gap-8 mb-12">
+            <div class="count-unit">
+                <div id="days" class="text-4xl md:text-5xl font-black text-yellow-400">00</div>
+                <div class="text-[10px] uppercase mt-2 text-gray-400 font-bold">Ngày</div>
+            </div>
+            <div class="count-unit">
+                <div id="hours" class="text-4xl md:text-5xl font-black text-yellow-400">00</div>
+                <div class="text-[10px] uppercase mt-2 text-gray-400 font-bold">Giờ</div>
+            </div>
+            <div class="count-unit">
+                <div id="mins" class="text-4xl md:text-5xl font-black text-yellow-400">00</div>
+                <div class="text-[10px] uppercase mt-2 text-gray-400 font-bold">Phút</div>
+            </div>
+            <div class="count-unit">
+                <div id="secs" class="text-4xl md:text-5xl font-black text-white">00</div>
+                <div class="text-[10px] uppercase mt-2 text-gray-400 font-bold">Giây</div>
+            </div>
+        </div>
 
-<h1 class="text-yellow-400 font-black text-xl cursor-pointer"
-onclick="showSection('home')">
-🎓 LỚP 12A5
-</h1>
-
-<div class="flex gap-6 nav-btn">
-
-<button onclick="showSection('home')">Trang chủ</button>
-<button onclick="showSection('students')">Học sinh</button>
-<button onclick="showSection('gallery')">Kỷ niệm</button>
-
-</div>
-
-</div>
-</header>
-
-
-
-<!-- HOME -->
-
-<section id="section-home"
-class="min-h-screen flex flex-col justify-center items-center text-center">
-
-<div class="text-7xl mb-6">🎓</div>
-
-<h1 class="text-4xl md:text-6xl font-black text-yellow-400 mb-6">
-KỲ THI THPT QUỐC GIA 2026
-</h1>
-
-<p class="text-gray-300 mb-6">
-Thời gian còn lại
-</p>
-
-<div class="bg-black/40 border border-yellow-500 rounded-3xl px-10 py-8 shadow-2xl">
-
-<div id="countdown" class="countbox text-yellow-400">
-...
-</div>
-
-<p class="text-gray-400 mt-4">
-Ngày thi: <b>11 / 06 / 2026</b>
-</p>
-
-</div>
-
-<div class="mt-10 max-w-xl text-gray-300 italic">
-"Mỗi ngày cố gắng một chút — ngày thi bạn sẽ cảm ơn chính mình."
-</div>
-
+        <p class="text-gray-400 max-w-lg mx-auto italic border-l-2 border-yellow-500 pl-4">
+            "Áp lực tạo nên kim cương. Đừng dừng lại khi mệt mỏi, hãy dừng lại khi đã hoàn thành."
+        </p>
+    </div>
 </section>
 
-
-
-<!-- STUDENTS -->
-
-<section id="section-students" class="hidden p-10 max-w-6xl mx-auto">
-
-<h2 class="text-2xl font-black text-yellow-400 mb-6">
-Danh sách học sinh
-</h2>
-
-<div id="studentList"
-class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-</div>
-
+<section id="section-students" class="hidden py-16 px-6 max-w-7xl mx-auto">
+    <div class="flex justify-between items-end mb-12">
+        <div>
+            <h2 class="text-3xl font-black text-yellow-400">Gia Đình 12A5</h2>
+            <p class="text-gray-400">Những người bạn đồng hành suốt thanh xuân</p>
+        </div>
+    </div>
+    
+    <div id="studentList" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
+        </div>
 </section>
 
-
-
-<!-- GALLERY -->
-
-<section id="section-gallery" class="hidden p-10 max-w-6xl mx-auto">
-
-<h2 class="text-2xl font-black text-yellow-400 mb-10">
-Hành trình 3 năm
-</h2>
-
-<div class="grid md:grid-cols-3 gap-6">
-
-<img src="class10.jpg" class="rounded-xl cursor-pointer hover:scale-105 transition">
-
-<img src="class11.jpg" class="rounded-xl cursor-pointer hover:scale-105 transition">
-
-<img src="class12.jpg" class="rounded-xl cursor-pointer hover:scale-105 transition">
-
-</div>
-
+<section id="section-gallery" class="hidden py-16 px-6 max-w-7xl mx-auto">
+    <h2 class="text-3xl font-black text-yellow-400 mb-10 text-center">Cuốn Album Thời Gian</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="space-y-4">
+            <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1000" class="rounded-2xl hover:opacity-80 transition cursor-pointer">
+            <img src="https://images.unsplash.com/photo-1541339907198-e08756defefe?q=80&w=1000" class="rounded-2xl hover:opacity-80 transition cursor-pointer">
+        </div>
+        <div class="space-y-4 pt-8">
+            <img src="https://images.unsplash.com/photo-1523240715639-9978131b734d?q=80&w=1000" class="rounded-2xl hover:opacity-80 transition cursor-pointer">
+            <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?q=80&w=1000" class="rounded-2xl hover:opacity-80 transition cursor-pointer">
+        </div>
+        <div class="space-y-4">
+            <img src="https://images.unsplash.com/photo-1525921429624-479b6a26d84d?q=80&w=1000" class="rounded-2xl hover:opacity-80 transition cursor-pointer">
+        </div>
+    </div>
 </section>
 
-
-
-<!-- STUDENT MODAL -->
-
-<div id="studentModal"
-class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
-
-<div class="bg-zinc-900 p-6 rounded-xl border border-yellow-500 w-80 text-center">
-
-<img id="modalAvatar"
-class="w-28 h-28 rounded-full mx-auto border-4 border-yellow-500 mb-4">
-
-<h3 id="modalName" class="text-yellow-400 text-xl font-bold"></h3>
-
-<p id="modalDesc" class="text-gray-300 mt-3"></p>
-
-<button onclick="closeModal()"
-class="mt-6 bg-yellow-500 text-black px-4 py-2 rounded">
-Đóng
-</button>
-
-</div>
-
-</div>
-
-
-
-<footer class="text-center text-gray-400 p-6 border-t border-yellow-500 mt-10">
-© 2026 - Lớp 12A5 THPT Rạch Kiến
+<footer class="mt-20 py-10 border-t border-white/5 text-center text-gray-500 text-sm">
+    <p>© 2026 Tập thể lớp 12A5 - THPT Rạch Kiến</p>
+    <p class="mt-2 text-yellow-500/50">Designed for Future Legends</p>
 </footer>
 
-
+<div id="studentModal" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-[100] p-4 backdrop-blur-md">
+    <div class="glass max-w-sm w-full p-8 rounded-3xl text-center relative">
+        <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+        <div class="relative inline-block mb-6">
+            <img id="modalAvatar" class="w-32 h-32 rounded-2xl object-cover border-2 border-yellow-500 rotate-3">
+        </div>
+        <h3 id="modalName" class="text-2xl font-black text-yellow-400 mb-2 uppercase tracking-tighter"></h3>
+        <div class="h-[2px] w-12 bg-yellow-500 mx-auto mb-4"></div>
+        <p id="modalDesc" class="text-gray-300 leading-relaxed italic"></p>
+        <div class="mt-8 flex justify-center gap-4">
+             <i class="fab fa-facebook text-blue-400 text-xl"></i>
+             <i class="fab fa-instagram text-pink-400 text-xl"></i>
+        </div>
+    </div>
+</div>
 
 <script>
+    /* --- CONFIG FIREBASE (Giữ nguyên từ file cũ) --- */
+    const firebaseConfig = {
+        apiKey: "AIzaSyC8DW3w2ZbhZ8tnAA6ZJ-BQ69JMu0yVtzQ",
+        authDomain: "dsclass12a5.firebaseapp.com",
+        projectId: "dsclass12a5",
+        storageBucket: "dsclass12a5.firebasestorage.app",
+        messagingSenderId: "542384706583",
+        appId: "1:542384706583:web:10b1e914b5479cc93fb852"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-/* ===== FIREBASE ===== */
+    /* --- COUNTDOWN LOGIC --- */
+    function updateCountdown() {
+        const examDate = new Date("June 11, 2026 00:00:00").getTime();
+        const now = new Date().getTime();
+        const diff = examDate - now;
 
-const firebaseConfig = {
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
 
-apiKey: "AIzaSyC8DW3w2ZbhZ8tnAA6ZJ-BQ69JMu0yVtzQ",
-authDomain: "dsclass12a5.firebaseapp.com",
-projectId: "dsclass12a5",
-storageBucket: "dsclass12a5.firebasestorage.app",
-messagingSenderId: "542384706583",
-appId: "1:542384706583:web:10b1e914b5479cc93fb852"
+        document.getElementById("days").innerText = d < 10 ? '0' + d : d;
+        document.getElementById("hours").innerText = h < 10 ? '0' + h : h;
+        document.getElementById("mins").innerText = m < 10 ? '0' + m : m;
+        document.getElementById("secs").innerText = s < 10 ? '0' + s : s;
+    }
+    setInterval(updateCountdown, 1000);
 
-};
+    /* --- NAVIGATION --- */
+    function showSection(name) {
+        document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+        document.getElementById('section-' + name).classList.remove('hidden');
+        if(name === 'students') loadStudents();
+        window.scrollTo(0,0);
+    }
 
-firebase.initializeApp(firebaseConfig);
+    /* --- LOAD DATA --- */
+    function loadStudents() {
+        const container = document.getElementById("studentList");
+        container.innerHTML = `<div class="col-span-full text-center py-10">Đang gọi tên các chiến binh...</div>`;
 
-const db = firebase.firestore();
+        db.collection("students").get().then((querySnapshot) => {
+            container.innerHTML = "";
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const card = document.createElement("div");
+                card.className = "student-card glass p-5 rounded-2xl text-center border border-white/5 cursor-pointer";
+                card.innerHTML = `
+                    <img src="${data.avatar || 'https://via.placeholder.com/150'}" class="w-full aspect-square object-cover rounded-xl mb-4 shadow-lg">
+                    <h4 class="font-bold text-yellow-400 uppercase text-sm tracking-tight">${data.name}</h4>
+                    <p class="text-[10px] text-gray-500 mt-1 uppercase">Học sinh lớp 12A5</p>
+                `;
+                card.onclick = () => openModal(data);
+                container.appendChild(card);
+            });
+        }).catch(err => {
+            container.innerHTML = "Lỗi tải dữ liệu. Hãy kiểm tra kết nối!";
+        });
+    }
 
+    /* ===== CẬP NHẬT MODAL HỌC SINH ===== */
+function openModal(student) {
+    document.getElementById("modalAvatar").src = student.avatar || 'https://via.placeholder.com/150';
+    document.getElementById("modalName").innerText = student.name;
+    document.getElementById("modalDesc").innerText = student.description || "Thành viên lớp 12A5";
 
+    // Tìm vùng chứa icon mạng xã hội trong Modal
+    const socialContainer = document.querySelector("#studentModal .flex.justify-center");
+    
+    // Xóa nội dung cũ và tạo nút mới dựa trên link Facebook
+    if (student.facebook) {
+        socialContainer.innerHTML = `
+            <a href="${student.facebook}" target="_blank" class="hover:scale-125 transition-transform duration-300">
+                <i class="fab fa-facebook text-blue-500 text-3xl"></i>
+            </a>
+        `;
+    } else {
+        socialContainer.innerHTML = `<span class="text-gray-500 text-xs italic">Chưa cập nhật mạng xã hội</span>`;
+    }
 
-/* ===== COUNTDOWN ===== */
-
-function updateCountdown(){
-
-const examDate = new Date("June 11, 2026 00:00:00").getTime();
-
-const now = new Date().getTime();
-
-const distance = examDate - now;
-
-const days = Math.floor(distance/(1000*60*60*24));
-const hours = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
-const minutes = Math.floor((distance%(1000*60*60))/(1000*60));
-const seconds = Math.floor((distance%(1000*60))/1000);
-
-document.getElementById("countdown").innerHTML =
-days+" ngày "+hours+" giờ "+minutes+" phút "+seconds+"s";
-
+    const modal = document.getElementById("studentModal");
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
 }
+    }
 
-setInterval(updateCountdown,1000);
-
-
-
-/* ===== NAVIGATION ===== */
-
-function showSection(name){
-
-const sections=["home","students","gallery"];
-
-sections.forEach(s=>{
-
-const el=document.getElementById("section-"+s);
-
-if(s===name){
-
-el.classList.remove("hidden");
-
-if(name==="students") loadStudents();
-
-}else{
-
-el.classList.add("hidden");
-
-}
-
-});
-
-}
-
-
-
-/* ===== LOAD STUDENTS ===== */
-
-function loadStudents(){
-
-const container=document.getElementById("studentList");
-
-container.innerHTML="Đang tải...";
-
-db.collection("students").get().then((snapshot)=>{
-
-container.innerHTML="";
-
-snapshot.forEach(doc=>{
-
-const student=doc.data();
-
-const card=document.createElement("div");
-
-card.className="student-card bg-zinc-800 p-4 rounded-xl text-center cursor-pointer transition";
-
-card.innerHTML=`
-
-<img src="${student.avatar || 'default-avatar.png'}"
-class="w-24 h-24 mx-auto rounded-full border-4 border-yellow-500 mb-3">
-
-<h3 class="text-yellow-400 font-bold">${student.name}</h3>
-
-`;
-
-card.onclick=()=>openModal(student);
-
-container.appendChild(card);
-
-});
-
-});
-
-}
-
-
-
-/* ===== STUDENT MODAL ===== */
-
-function openModal(student){
-
-document.getElementById("modalAvatar").src=student.avatar||"default-avatar.png";
-
-document.getElementById("modalName").innerText=student.name;
-
-document.getElementById("modalDesc").innerText=
-student.description || "Thành viên lớp 12A5";
-
-document.getElementById("studentModal").classList.remove("hidden");
-
-}
-
-function closeModal(){
-
-document.getElementById("studentModal").classList.add("hidden");
-
-}
-
+    function closeModal() {
+        const modal = document.getElementById("studentModal");
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+    }
 </script>
 
 </body>
 </html>
-```
